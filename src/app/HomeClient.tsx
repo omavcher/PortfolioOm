@@ -22,13 +22,13 @@ const PROJECTS = [
     subtitle: "AI Companion Platform",
     desc: "Scaled to 550,000+ users. Custom Priority Queue, Emotional Cache (sub-12ms), Nginx load balancing with sticky sessions.",
     tags: ["Next.js", "Node.js", "OpenAI", "Redis", "Nginx", "MongoDB"],
-    logo: "https://www.heartecho.in/_next/image?url=%2Fheartechor.png&w=256&q=75",
+    logo: "https://www.heartecho.in/heartechor.png",
     liveUrl: "https://www.heartecho.in",
     githubUrl: "https://github.com/omavcher/heartecho",
     caseStudy: null,
     stat: { label: "Users Served", value: "550K+" },
-    accent: "bg-red-50 border-red-200",
-    accentColor: "text-red-600",
+    accent: "bg-pink-50 border-pink-200",
+    accentColor: "text-pink-600",
   },
   {
     id: "paperxify",
@@ -41,8 +41,8 @@ const PROJECTS = [
     githubUrl: "https://github.com/omavcher/yt-notes",
     caseStudy: null,
     stat: { label: "Generation Time", value: "~7s" },
-    accent: "bg-blue-50 border-blue-200",
-    accentColor: "text-blue-600",
+    accent: "bg-red-50 border-red-200",
+    accentColor: "text-red-600",
   },
   {
     id: "social-manager",
@@ -364,9 +364,9 @@ const TICKER_ITEMS = [
 // ─── HOME STICKY PROJECTS ─────────────────────────────────────────────────────
 
 const HOME_PROJ_GRADIENTS = [
-  { from: "#be123c", to: "#7f1d1d", accent: "#f43f5e" },
-  { from: "#1d4ed8", to: "#1e1b4b", accent: "#3b82f6" },
-  { from: "#065f46", to: "#022c22", accent: "#10b981" },
+  { from: "#db2777", to: "#5b0e2d", accent: "#ec4899" }, // Pink gradient for HeartEcho
+  { from: "#be123c", to: "#7f1d1d", accent: "#f43f5e" }, // Red gradient for PaperXify
+  { from: "#065f46", to: "#022c22", accent: "#10b981" }, // Green gradient for Social Manager
 ];
 
 // 3 resting positions for the stacked fan (back-left, back-right, front)
@@ -385,14 +385,14 @@ const FAN_ENTERS = [
 const FAN_DELAYS = [0.24, 0.15, 0.06];
 
 const HOME_PROJ_IMAGES: Record<number, string[]> = {
-  0: ["/projects/heartecho-1.png", "/projects/heartecho-2.png", "/projects/heartecho-3.png"],
-  1: ["/projects/paperxify-1.png", "/projects/paperxify-2.png", "/projects/paperxify-3.png"],
+  0: ["/projects/heartecho-3.png", "/projects/heartecho-2.png", "/projects/heartecho-1.png"],
+  1: ["/projects/paperxify-3.png", "/projects/paperxify-2.png", "/projects/paperxify-1.png"],
   2: ["/projects/social-1.png", "/projects/social-2.png", "/projects/social-3.png"],
 };
 
 const HOME_PROJ_LABELS: Record<number, string[]> = {
-  0: ["landing", "dashboard", "chat ui"],
-  1: ["landing", "pipeline", "output"],
+  0: ["caliing", "chat ui", "landing"],
+  1: ["pricing", "output", "landing"],
   2: ["dashboard", "generator", "scheduler"],
 };
 

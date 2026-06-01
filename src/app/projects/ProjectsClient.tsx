@@ -44,12 +44,12 @@ const PROJECTS = [
     stats: [{ val: "550K+", label: "Users" }, { val: "<12ms", label: "Latency" }, { val: "4×", label: "Clusters" }],
     tags: ["Next.js", "Node.js", "OpenAI", "Redis", "Nginx", "MongoDB", "Socket.io", "AWS"],
     images: [
-      { src: "/projects/heartecho-1.png", label: "Landing" },
-      { src: "/projects/heartecho-2.png", label: "Dashboard" },
-      { src: "/projects/heartecho-3.png", label: "Chat UI"   },
+      { src: "/projects/heartecho-3.png", label: "caliing" },
+      { src: "/projects/heartecho-2.png", label: "chat ui" },
+      { src: "/projects/heartecho-1.png", label: "landing" },
     ],
     liveUrl: "https://www.heartecho.in", githubUrl: "https://github.com/omavcher/heartecho",
-    isPrivate: false, from: "#be123c", to: "#7f1d1d", accentHex: "#f43f5e",
+    isPrivate: false, from: "#db2777", to: "#5b0e2d", accentHex: "#ec4899",
   },
   {
     num: "02", category: "EdTech · AI", date: "2024",
@@ -65,12 +65,12 @@ const PROJECTS = [
     stats: [{ val: "~7s", label: "Gen Time" }, { val: "8 hrs", label: "Lecture" }, { val: "∞", label: "Transcripts" }],
     tags: ["MERN", "Node.js", "OpenAI", "Puppeteer", "MongoDB", "TypeScript"],
     images: [
-      { src: "/projects/paperxify-1.png", label: "Landing" },
-      { src: "/projects/paperxify-2.png",                              label: "Pipeline" },
-      { src: "/projects/paperxify-3.png",                              label: "Output"   },
+      { src: "/projects/paperxify-3.png", label: "pricing" },
+      { src: "/projects/paperxify-2.png", label: "output" },
+      { src: "/projects/paperxify-1.png", label: "landing" },
     ],
     liveUrl: null, githubUrl: "https://github.com/omavcher/yt-notes",
-    isPrivate: false, from: "#1d4ed8", to: "#1e1b4b", accentHex: "#3b82f6",
+    isPrivate: false, from: "#be123c", to: "#7f1d1d", accentHex: "#f43f5e",
   },
   {
     num: "03", category: "AI SaaS", date: "2025",
