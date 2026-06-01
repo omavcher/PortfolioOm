@@ -1,65 +1,147 @@
-import Image from "next/image";
+import { Metadata } from "next";
+import HomeClient from "./HomeClient";
 
-export default function Home() {
+const BASE = "https://omavchar.space";
+
+export const metadata: Metadata = {
+  title: "Om Avchar — Backend Engineer & System Design Expert",
+  description:
+    "Portfolio of Om Avchar — a Backend Engineer from Nagpur, India specialising in System Design, Node.js, Redis, Kafka, AI Pipelines, and scalable microservices. Built HeartEcho (550K+ users). Open to internships & collaborations.",
+  keywords: [
+    "Om Avchar portfolio",
+    "Om Avchar",
+    "Om Awchar",
+    "Backend Developer Nagpur",
+    "Backend Engineer India",
+    "System Design Expert India",
+    "Node.js Developer India",
+    "Full Stack Developer Nagpur",
+    "AI Engineer India",
+    "Redis Expert",
+    "Apache Kafka Developer",
+    "MongoDB Developer",
+    "Next.js Developer India",
+    "Software Engineer Portfolio 2026",
+    "HeartEcho developer",
+    "PaperXify developer",
+    "GWCET engineer",
+    "omavchar.space",
+    "microservices architect India",
+    "backend architecture portfolio",
+    "NIT Rourkela AIR 11",
+    "ET-AI Hackathon semi-finalist",
+  ],
+  alternates: {
+    canonical: BASE,
+  },
+  openGraph: {
+    title: "Om Avchar — Backend Engineer & System Design Expert",
+    description:
+      "Backend engineering portfolio — System Design, Node.js, Redis, Kafka, AI Pipelines. Built HeartEcho (550K+ users). Based in Nagpur, India.",
+    url: BASE,
+    type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Om Avchar Portfolio" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Om Avchar — Backend Engineer & System Design Expert",
+    description: "Backend engineering portfolio — Node.js, Redis, Kafka, AI. Built HeartEcho (550K users). Nagpur, India.",
+    images: ["/og-image.png"],
+  },
+};
+
+export default function Page() {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Om Avchar",
+    alternateName: "Om Awchar",
+    url: BASE,
+    image: `${BASE}/my.avif`,
+    jobTitle: "Backend Engineer",
+    description:
+      "Backend Engineer and System Design Expert from Nagpur, India. Specialises in Node.js, Redis, Kafka, AI Pipelines, and high-concurrency microservices.",
+    email: "omavchar@gmail.com",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Nagpur",
+      addressRegion: "Maharashtra",
+      addressCountry: "IN",
+    },
+    sameAs: [
+      "https://github.com/omavcher",
+      "https://linkedin.com/in/omawchar",
+      "https://leetcode.com/u/omavcher/",
+    ],
+    alumniOf: {
+      "@type": "CollegeOrUniversity",
+      name: "G H Raisoni College of Engineering (GWCET)",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Nagpur",
+        addressRegion: "Maharashtra",
+        addressCountry: "IN",
+      },
+    },
+    knowsAbout: [
+      "System Design",
+      "Backend Engineering",
+      "Microservices Architecture",
+      "Node.js",
+      "Apache Kafka",
+      "Redis",
+      "MongoDB",
+      "PostgreSQL",
+      "Artificial Intelligence",
+      "Machine Learning",
+      "Data Structures and Algorithms",
+      "Next.js",
+      "AWS",
+      "Docker",
+    ],
+    hasOccupation: {
+      "@type": "Occupation",
+      name: "Backend Software Engineer",
+      occupationLocation: {
+        "@type": "City",
+        name: "Nagpur, Maharashtra, India",
+      },
+    },
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Om Avchar — Portfolio",
+    url: BASE,
+    description:
+      "Portfolio of Om Avchar — Backend Engineer and System Design Expert from Nagpur, India.",
+    author: {
+      "@type": "Person",
+      name: "Om Avchar",
+    },
+    inLanguage: "en-US",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${BASE}/blogs?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
+      <HomeClient />
+    </>
   );
 }
