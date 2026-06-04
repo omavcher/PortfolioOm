@@ -1,0 +1,265 @@
+---
+title: "How YouTube Stores Billions of Videos — A Deep Dive into Planetary-Scale Infrastructure"
+date: "2026-06-03"
+tags: ["system-design", "youtube", "distributed-systems", "video-streaming", "google", "infrastructure", "backend"]
+excerpt: "YouTube serves over 500 hours of video uploaded every minute and streams to 2 billion logged-in users monthly. How does the infrastructure behind that actually work? This is a deep, honest engineering breakdown."
+cover: "/blogs/youtube-storage.png"
+---
+
+## The Scale That Breaks Every Intuition
+
+Before we talk architecture, let's appreciate the numbers — because they break every intuition you have about software systems.
+
+- **500+ hours** of video uploaded to YouTube every single minute
+- **2 billion+** logged-in users per month
+- **1 billion hours** of video watched daily
+- **4K, 1080p, 720p, 480p, 360p, 144p** — every video encoded in up to 12+ formats
+- Streams served in **100+ countries**, often with sub-2-second start times
+
+This isn't just a big application. It's a different category of engineering problem. One where standard solutions don't scale, and where every layer of the stack has been custom-built or radically adapted.
+
+Let's go layer by layer.
+
+---
+
+## Layer 1: Video Upload — Getting Bits Off Your Phone
+
+When you tap "Upload" on YouTube, a seemingly simple action triggers a deeply engineered pipeline.
+
+### Chunked Upload Protocol
+
+YouTube doesn't receive your video as a single HTTP request. It uses **resumable uploads** (documented in the Google APIs spec) where the client breaks the file into chunks — typically 256 KB to a few MB — and uploads each chunk with a unique upload session ID.
+
+Why chunked? Because:
+
+- Mobile networks drop. If your upload fails at 98%, you want to resume from there, not start over.
+- It allows YouTube's servers to begin **processing video before the upload is even complete**.
+- It enables **parallel chunk ingestion** across multiple upload servers.
+
+Behind the scenes, these chunks hit **YouTube's upload servers** — a fleet of regionally distributed machines that buffer incoming video bytes and write them to a staging area.
+
+### Where Do Uploaded Videos Go First?
+
+The first destination is **Google Cloud Storage (GCS)** — Google's object storage system. But not the final replica. Newly uploaded videos land in a temporary "raw" bucket, still in the original format the user uploaded (H.264, HEVC, ProRes, even old MPEG-2 files from 2007).
+
+From there, the raw video is enqueued into a **transcoding pipeline**. This is where the real engineering begins.
+
+---
+
+## Layer 2: Transcoding — One Video, Twelve Formats
+
+Every YouTube video you've ever watched was not served in the format it was uploaded in. YouTube re-encodes every single video into multiple target formats.
+
+### Why Transcode?
+
+1. **Device compatibility**: A 4K HEVC file won't play on a 2015 Android device.
+2. **Bandwidth adaptation**: A user on a 3G connection needs 144p. A fiber user on a TV needs 4K.
+3. **Codec efficiency**: YouTube has been progressively migrating to **VP9** and now **AV1** — codecs that deliver better quality at lower bitrates, saving enormous bandwidth costs.
+
+### What Gets Generated?
+
+For a typical 1080p upload, YouTube generates roughly 12 output variants:
+
+| Resolution | Codec | Typical Bitrate |
+|---|---|---|
+| 4320p (8K) | AV1 / VP9 | 40–80 Mbps |
+| 2160p (4K) | AV1 / VP9 | 15–25 Mbps |
+| 1440p | VP9 | 8–16 Mbps |
+| 1080p | AV1 / H.264 | 3–8 Mbps |
+| 720p | VP9 / H.264 | 1.5–4 Mbps |
+| 480p | H.264 | 0.5–1.5 Mbps |
+| 360p | H.264 | 300–700 Kbps |
+| 240p | H.264 | 150–400 Kbps |
+| 144p | H.264 | 80–200 Kbps |
+
+Each resolution also gets multiple audio tracks (different languages, qualities).
+
+### The Transcoding Infrastructure
+
+YouTube runs one of the largest transcoding fleets on Earth. This is a massively parallel, distributed job execution system:
+
+1. The raw video is split into **GOP-aligned segments** (Groups of Pictures — typically a few seconds each).
+2. Each segment is dispatched to a **separate transcoding worker**.
+3. Thousands of machines process the segments in **parallel**.
+4. The output segments are reassembled and stitched back together.
+
+This is why a 10-minute video can finish transcoding in under 5 minutes on YouTube — the work is divided across hundreds of machines simultaneously.
+
+YouTube's transcoding system is built on top of **Google's Borg** (the predecessor to Kubernetes) and custom workflow orchestration. At this scale, even 1% inefficiency translates to thousands of wasted machine-hours per day.
+
+---
+
+## Layer 3: Storage — Where Do Billions of Videos Actually Live?
+
+This is where most explanations get vague. Let's be precise.
+
+### Bigtable + Colossus
+
+YouTube's video files don't sit in a traditional filesystem. They're stored in **Google's Colossus** — Google's second-generation distributed filesystem (successor to GFS, the Google File System that inspired HDFS).
+
+Colossus is a cluster filesystem that:
+
+- Stores data as **immutable chunks** (64 MB by default)
+- Replicates data across multiple physical machines within a datacenter
+- Tracks metadata (which chunks belong to which file) in a separate **metadata cluster**
+- Provides near-linear read throughput by striping reads across many disks in parallel
+
+For metadata — information about videos (title, description, upload time, view count, owner) — YouTube uses **Google Bigtable** and **Spanner**. Bigtable handles high-write-throughput workloads (logging view events), while Spanner handles globally consistent relational data.
+
+### How Is Video Data Replicated?
+
+A naïve approach would be: store 3 copies of every video in every datacenter. That's a petabyte disaster.
+
+YouTube uses a smarter strategy based on **access frequency**:
+
+**Tier 1 — Hot Videos** (freshly uploaded, trending, high view count):
+- Stored with **full geographic replication** across multiple regions
+- Cached aggressively at CDN edge nodes
+- Multiple copies in fast NVMe / SSD-backed storage
+
+**Tier 2 — Warm Videos** (moderate traffic, weeks-to-months old):
+- Stored in fewer regions
+- CDN caches serve most requests; origin serves cache misses
+
+**Tier 3 — Cold Videos** (rarely watched, years old):
+- Stored in a **single region** on cheap spinning disk or tape-equivalent storage
+- No CDN caching; served on-demand with higher latency acceptable
+- Uses **erasure coding** instead of full replication to reduce storage cost by ~50%
+
+This tiered system is critical. Without it, storing 3 full copies of every video ever uploaded would require hundreds of exabytes of storage instead of the tens of exabytes YouTube actually uses.
+
+---
+
+## Layer 4: The CDN — Making Playback Feel Instant Globally
+
+Even with perfect origin storage, a request from Mumbai to a datacenter in Iowa would have ~200ms of round-trip latency before a single byte of video arrives. That's unacceptable for streaming.
+
+YouTube solves this with one of the world's largest **Content Delivery Networks**, powered by **Google's global network**.
+
+### How Google's CDN Works for YouTube
+
+Google operates its own **private backbone** — a network of submarine cables, private fiber, and PoPs (Points of Presence) in over 200 cities globally.
+
+When you watch a YouTube video:
+
+1. Your DNS request resolves to the **nearest Google edge node** (using Anycast routing).
+2. The edge node checks if it has the video segment cached.
+3. **Cache hit**: Bytes are served directly from the edge, typically with <20ms latency.
+4. **Cache miss**: The edge fetches the segment from the nearest **regional cache** (a mid-tier caching layer). If that also misses, it fetches from origin.
+
+This multi-tier caching architecture means that for popular videos, **the origin storage system is barely touched**. A trending video might be cached at hundreds of edge nodes simultaneously, with origin receiving only a tiny fraction of total requests.
+
+### Adaptive Bitrate Streaming (DASH)
+
+YouTube doesn't stream video as one continuous file. It uses **MPEG-DASH** (Dynamic Adaptive Streaming over HTTP):
+
+1. Video is pre-segmented into 2–10 second chunks.
+2. The player downloads an **MPD manifest** describing all available quality levels and segment URLs.
+3. As playback progresses, the player continuously measures **available bandwidth** and **buffer health**.
+4. It requests the highest quality level it can sustain without buffering.
+5. If network conditions change, it **seamlessly switches quality mid-playback**.
+
+This is why YouTube never freezes — it prefers showing you 480p over buffering at 1080p.
+
+---
+
+## Layer 5: The Database Layer — Metadata at Planetary Scale
+
+Every YouTube page load requires querying metadata: video title, thumbnail URL, view count, like count, comments, recommended videos, and more.
+
+### Vitess — MySQL That Scales Horizontally
+
+For relational video metadata, YouTube built and open-sourced **Vitess** — a database clustering system for MySQL.
+
+The problem: MySQL is excellent, but a single MySQL instance can't handle YouTube's write throughput (billions of view count updates per day, millions of comment writes per hour). Vitess solves this by:
+
+- **Sharding** MySQL across hundreds of nodes transparently
+- Providing a **unified query interface** — application code talks to Vitess as if it's a single database
+- Handling **resharding** without downtime when data grows
+- Managing **connection pooling** to prevent thundering-herd connection storms
+
+Vitess is now used by TikTok, Slack, GitHub, and others — a testament to how universally hard this scaling problem is.
+
+### Bigtable for High-Throughput Event Logging
+
+Every time someone views a video, likes it, or adds a comment, YouTube logs an event. At 1 billion daily views, that's millions of writes per second.
+
+**Google Bigtable** handles this — a sparse, distributed, persistent multi-dimensional sorted map. Key design properties that make it work here:
+
+- **Log-structured storage**: Writes are sequential (fast). Reads are then merged across levels.
+- **No secondary indexes** by design: keeps write throughput extremely high.
+- **Row key design**: YouTube designs row keys so related events are **co-located** on the same tablet server, making range scans efficient.
+
+### Spanner for Global Consistency
+
+For data that must be consistent across regions — account information, ownership records, copyright metadata — YouTube uses **Google Spanner**: the world's first globally distributed SQL database with external consistency.
+
+Spanner achieves this using **TrueTime** — a globally synchronized clock with a bounded uncertainty of ~7ms, enabling serializable distributed transactions without the massive coordination overhead typical of distributed databases.
+
+---
+
+## Layer 6: Recommendations — The Hidden Infrastructure
+
+We can't talk about YouTube storage without touching the recommendation system, because it drives **70% of watch time** and requires its own massive infrastructure.
+
+The recommendation engine works in two stages:
+
+**Candidate Generation** (hundreds of candidates from billions of videos):
+- Uses **deep neural networks** trained on watch history, search history, demographics
+- Produces ~hundreds of video candidates per user per request
+- Runs in milliseconds using pre-computed embeddings stored in approximate nearest-neighbor indexes
+
+**Ranking** (scoring candidates):
+- A deeper neural network ranks candidates by predicted watch probability
+- Incorporates freshness, diversity, and explicit signals (dislikes, survey feedback)
+- Final ranked list is returned to the client
+
+The training infrastructure for this involves **petabyte-scale training datasets**, TPUs running for thousands of hours, and a continuous retraining loop that updates the model daily.
+
+---
+
+## The Numbers Behind the Numbers
+
+Let me put some concrete estimates on what this all means:
+
+| Metric | Estimated Value |
+|---|---|
+| Total video storage | ~1 exabyte (1,000 PB) |
+| Daily new video data (raw) | ~100+ TB |
+| CDN cache hit ratio (popular content) | ~95%+ |
+| Origin requests served at CDN | <5% of total traffic |
+| Transcoding workers | Tens of thousands of VMs |
+| Vitess shards | Hundreds of MySQL nodes |
+| End-to-end upload → playback ready | 30 seconds to a few minutes |
+
+---
+
+## Why This Matters for Engineers
+
+The YouTube architecture is a masterclass in several fundamental engineering principles:
+
+**1. Separate hot and cold paths.** The system is designed differently for trending content vs. archived content. One size never fits all at scale.
+
+**2. Push work upstream, not downstream.** Transcoding happens once at upload time, not on every view. Caching happens at the edge, not at origin. Pre-compute everything you can.
+
+**3. Embrace eventual consistency where you can.** View counts don't need to be perfectly accurate in real-time. Accepting eventual consistency allows YouTube to avoid coordination overhead that would kill throughput.
+
+**4. Build for failure, not against it.** Every component assumes the others will fail. Retries, circuit breakers, fallback quality levels, redundant storage — failure is a design input, not an edge case.
+
+**5. Open source what you generalize.** Vitess, AV1 (through the Alliance for Open Media), and YouTube's contributions to DASH exist because generalized solutions to hard problems deserve to be shared.
+
+---
+
+## Conclusion: Engineering at Civilizational Scale
+
+YouTube's infrastructure is not just impressive engineering — it's infrastructure that billions of people rely on daily, often without a second thought.
+
+The next time a video starts playing within 2 seconds of you tapping play on a rural 4G connection — that instant experience is the product of custom distributed filesystems, planetary-scale CDNs, purpose-built databases, parallel transcoding across thousands of machines, and a decade of continuous iteration by thousands of engineers.
+
+No single clever idea made this possible. It's the accumulation of thousands of right decisions, each solving the specific failure mode created by the last solution.
+
+That's what building at scale actually looks like.
+
+---
+
+*Written by Om Avchar — Software Engineer with a passion for distributed systems, infrastructure design, and understanding how the internet's largest systems actually work under the hood.*

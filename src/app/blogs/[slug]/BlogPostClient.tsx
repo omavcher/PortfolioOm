@@ -231,39 +231,103 @@ export default function BlogPostClient({ post }: { post: Post }) {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#fafaf7" }}>
 
-      {/* ── Cover hero — sits flush against navbar (no extra padding) ── */}
-      {post.cover ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="relative w-full border-b-2 border-black overflow-hidden"
-          style={{ paddingTop: "56px" /* exact navbar height */ }}
-        >
-          {/* Fixed 16:9 aspect container */}
-          <div className="relative w-full" style={{ aspectRatio: "16 / 5" }}>
-            <img
-              src={post.cover}
-              alt={post.title}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            {/* Bottom-to-paper gradient */}
-            <div
-              className="absolute inset-0"
-              style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, #fafaf7 100%)" }}
-            />
-            {/* Accent stripe at bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-[3px]"
-              style={{ backgroundColor: primaryAccent }} />
+      {/* ── Navbar clearance ── */}
+      <div style={{ paddingTop: "56px" }} />
+
+      {/* ── Editorial Hero ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pt-8 sm:pt-10"
+      >
+        {post.cover ? (
+          <div className="relative w-full overflow-hidden border-2 border-black mb-10 sm:mb-12"
+            style={{ boxShadow: `5px 5px 0 ${primaryAccent}` }}
+          >
+            {/* Image — natural 16:9 but max-height capped so it never dominates */}
+            <div className="relative w-full" style={{ aspectRatio: "16 / 7" }}>
+              <img
+                src={post.cover}
+                alt={post.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+
+              {/* Deep cinematic gradient at bottom for text overlay */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, rgba(0,0,0,0) 20%, rgba(0,0,0,0.55) 65%, rgba(0,0,0,0.88) 100%)",
+                }}
+              />
+
+              {/* Accent stripe top-left label */}
+              <div
+                className="absolute top-0 left-0 px-3 py-1.5 font-mono text-[8px] font-black uppercase tracking-[0.2em] text-white"
+                style={{ backgroundColor: primaryAccent }}
+              >
+                Blog Post
+              </div>
+
+              {/* Overlay content at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {post.tags.slice(0, 4).map((t) => (
+                    <span
+                      key={t}
+                      className="px-2 py-0.5 font-mono text-[7px] font-black uppercase tracking-wider text-white border border-white/30"
+                      style={{ backgroundColor: "rgba(255,255,255,0.12)", backdropFilter: "blur(4px)" }}
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Title overlaid on image */}
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-[1.2] tracking-tight drop-shadow-lg mb-3">
+                  {post.title}
+                </h1>
+
+                {/* Meta row on image */}
+                <div className="flex items-center gap-4 font-mono text-[8px] font-black uppercase tracking-widest text-white/60">
+                  {post.date && (
+                    <span className="flex items-center gap-1.5">
+                      <Calendar size={10} />
+                      {new Date(post.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1.5">
+                    <Clock size={10} /> {post.readTime}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
-        </motion.div>
-      ) : (
-        /* No cover — just add navbar clearance */
-        <div style={{ paddingTop: "56px" }} className="md:pt-[80px]" />
-      )}
+        ) : (
+          /* No cover fallback header */
+          <motion.header initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-10 sm:mb-12">
+            <div className="flex flex-wrap gap-2 mb-4">
+              {post.tags.map((t) => (
+                <span
+                  key={t}
+                  className="flex items-center gap-1 px-2.5 py-1 font-mono text-[7px] font-black uppercase border-2 tracking-wider"
+                  style={{ borderColor: tagAccent(t), color: tagAccent(t), backgroundColor: tagAccent(t) + "10" }}
+                >
+                  <Tag size={7} /> {t}
+                </span>
+              ))}
+            </div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 leading-[1.15] tracking-tight mb-3">
+              {post.title}
+            </h1>
+          </motion.header>
+        )}
+      </motion.div>
 
       {/* ── Page body: sidebar + content ── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pb-24 pt-8 sm:pt-10 flex gap-10 xl:gap-16 items-start">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pb-24 flex gap-10 xl:gap-16 items-start">
 
         {/* Content column */}
         <main className="flex-1 min-w-0">
@@ -278,50 +342,72 @@ export default function BlogPostClient({ post }: { post: Post }) {
             </Link>
           </motion.div>
 
-          {/* Article header */}
-          <motion.header initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-10 sm:mb-12">
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {post.tags.map((t) => (
-                <span
-                  key={t}
-                  className="flex items-center gap-1 px-2.5 py-1 font-mono text-[7px] font-black uppercase border-2 tracking-wider"
-                  style={{ borderColor: tagAccent(t), color: tagAccent(t), backgroundColor: tagAccent(t) + "10" }}
-                >
-                  <Tag size={7} /> {t}
-                </span>
-              ))}
-            </div>
-
-            {/* Title */}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 leading-[1.15] tracking-tight mb-3">
-              {post.title}
-            </h1>
-
-            {/* Excerpt */}
-            <p className="text-slate-500 text-sm sm:text-base leading-relaxed mb-5">
-              {post.excerpt}
-            </p>
-
-            {/* Meta bar */}
-            <div className="flex flex-wrap items-center gap-4 border-y-2 border-black py-3 font-mono text-[9px] font-black uppercase tracking-widest text-slate-400">
-              {post.date && (
-                <span className="flex items-center gap-1.5">
-                  <Calendar size={11} />
-                  {new Date(post.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
-                </span>
+          {/* Article sub-header — excerpt + meta (only shown when cover exists, since title/tags are on image) */}
+          {post.cover ? (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+              {/* Remaining tags (if more than 4) */}
+              {post.tags.length > 4 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {post.tags.slice(4).map((t) => (
+                    <span
+                      key={t}
+                      className="flex items-center gap-1 px-2.5 py-1 font-mono text-[7px] font-black uppercase border-2 tracking-wider"
+                      style={{ borderColor: tagAccent(t), color: tagAccent(t), backgroundColor: tagAccent(t) + "10" }}
+                    >
+                      <Tag size={7} /> {t}
+                    </span>
+                  ))}
+                </div>
               )}
-              <span className="flex items-center gap-1.5">
-                <Clock size={11} /> {post.readTime}
-              </span>
-              <button
-                onClick={handleShare}
-                className="ml-auto flex items-center gap-1.5 hover:text-black transition-colors"
-              >
-                <Share2 size={11} /> Share
-              </button>
-            </div>
-          </motion.header>
+
+              {/* Excerpt */}
+              <p className="text-slate-500 text-sm sm:text-base leading-relaxed mb-5">
+                {post.excerpt}
+              </p>
+
+              {/* Meta bar */}
+              <div className="flex flex-wrap items-center gap-4 border-y-2 border-black py-3 font-mono text-[9px] font-black uppercase tracking-widest text-slate-400">
+                {post.date && (
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={11} />
+                    {new Date(post.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                  </span>
+                )}
+                <span className="flex items-center gap-1.5">
+                  <Clock size={11} /> {post.readTime}
+                </span>
+                <button
+                  onClick={handleShare}
+                  className="ml-auto flex items-center gap-1.5 hover:text-black transition-colors"
+                >
+                  <Share2 size={11} /> Share
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+              <p className="text-slate-500 text-sm sm:text-base leading-relaxed mb-5">
+                {post.excerpt}
+              </p>
+              <div className="flex flex-wrap items-center gap-4 border-y-2 border-black py-3 font-mono text-[9px] font-black uppercase tracking-widest text-slate-400">
+                {post.date && (
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={11} />
+                    {new Date(post.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                  </span>
+                )}
+                <span className="flex items-center gap-1.5">
+                  <Clock size={11} /> {post.readTime}
+                </span>
+                <button
+                  onClick={handleShare}
+                  className="ml-auto flex items-center gap-1.5 hover:text-black transition-colors"
+                >
+                  <Share2 size={11} /> Share
+                </button>
+              </div>
+            </motion.div>
+          )}
 
           {/* Article body */}
           <motion.article
