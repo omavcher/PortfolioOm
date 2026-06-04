@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   Download, Github, Linkedin, ArrowRight, ExternalLink,
@@ -129,9 +130,27 @@ const VALUES = [
   { icon: <Globe size={18} className="text-emerald-600" />, title: "Open to Learn", desc: "Actively reading distributed systems papers, whitepapers from Google & Meta, and studying production postmortems.", accent: "#059669" },
 ];
 
+const STICKERS = [
+  {
+    id: "leetcode-2026",
+    name: "LeetCode 50 Days Badge 2026!",
+    description: "SOLVING PROBLEMS 50+ DAYS IN 2026",
+    image: "/leetcode_2026_badge.png",
+    initialRotation: -3,
+    left: "40%",
+    top: "20%",
+    sizeClass: "w-[90px] sm:w-[115px] md:w-[130px]",
+  }
+];
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function AboutClient() {
+  const arenaRef = useRef<HTMLDivElement>(null);
+  const [activeStickerId, setActiveStickerId] = useState<string | null>(null);
+
+
+
   return (
     <div className="min-h-screen pt-[56px] md:pt-[80px]" style={{ backgroundColor: "#fafaf7" }}>
 
@@ -231,6 +250,110 @@ export default function AboutClient() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          § SCRAPBOOK ARENA
+      ══════════════════════════════════════════ */}
+      {/* ══════════════════════════════════════════
+          § SCRAPBOOK ARENA
+      ══════════════════════════════════════════ */}
+      <section className="py-8 sm:py-12 px-4 sm:px-6 md:px-12 lg:px-24 border-b-2 border-black" style={{ backgroundColor: "#fafaf7" }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="section-label mb-2">Scrapbook</div>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-4">
+            <div>
+              <h2 className="section-heading mb-1 text-2xl sm:text-4xl">
+                My Arena
+              </h2>
+              <p className="font-mono text-[9px] uppercase tracking-wider text-slate-400">
+                Drag badges around. They will snap back to their spots!
+              </p>
+            </div>
+          </div>
+
+          {/* Arena Board */}
+          <div 
+            ref={arenaRef}
+            className="border-2 border-black bg-white rounded-lg relative h-[200px] sm:h-[240px] md:h-[260px] overflow-visible select-none cursor-default"
+            style={{ 
+              boxShadow: "3px 3px 0 #000",
+              backgroundImage: "radial-gradient(#cbd5e1 1.5px, transparent 1.5px)",
+              backgroundSize: "20px 20px"
+            }}
+          >
+            {/* Draggable Stickers */}
+            {STICKERS.map((sticker) => {
+              const isActive = activeStickerId === sticker.id;
+
+              return (
+                <motion.div
+                  key={sticker.id}
+                  drag
+                  dragConstraints={arenaRef}
+                  dragElastic={0.5}
+                  dragSnapToOrigin={true}
+                  dragTransition={{ bounceStiffness: 600, bounceDamping: 25 }}
+                  whileDrag={{ scale: 1.1, rotate: 0, zIndex: 100 }}
+                  whileHover={{ scale: 1.05, zIndex: 50 }}
+                  initial={{ 
+                    x: 0, 
+                    y: 0, 
+                    rotate: sticker.initialRotation 
+                  }}
+                  style={{
+                    position: "absolute",
+                    left: sticker.left,
+                    top: sticker.top,
+                    cursor: "grab",
+                  }}
+                  className={`touch-none flex flex-col items-center group ${sticker.sizeClass}`}
+                  onMouseEnter={() => setActiveStickerId(sticker.id)}
+                  onMouseLeave={() => setActiveStickerId(null)}
+                  onTapStart={() => setActiveStickerId(sticker.id)}
+                >
+                  <div className="relative w-full flex flex-col items-center">
+                    {/* Sticker Shadow */}
+                    <div className="absolute inset-0 bg-black/10 blur-[3px] rounded-full scale-95 translate-y-1 transition-transform group-hover:translate-y-2" />
+                    
+                    {/* Sticker Image */}
+                    <img 
+                      src={sticker.image} 
+                      alt={sticker.name}
+                      className="w-full h-auto select-none pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] transition-all duration-300 group-hover:rotate-2"
+                      style={{
+                        WebkitUserDrag: "none",
+                      }}
+                    />
+
+                    {/* Hover Floating Card Tooltip */}
+                    <AnimatePresence>
+                      {isActive && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                          className="absolute top-[105%] z-50 w-[160px] sm:w-[200px] bg-zinc-900 border border-black text-white p-3 rounded-md shadow-lg pointer-events-none text-center"
+                          style={{
+                            boxShadow: "3px 3px 0 #000",
+                          }}
+                        >
+                          <h4 className="font-mono text-[8px] font-black uppercase tracking-wider text-amber-500 mb-1">
+                            {sticker.name}
+                          </h4>
+                          <p className="text-[9px] sm:text-xs font-normal text-slate-200 leading-relaxed font-sans">
+                            {sticker.description}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
