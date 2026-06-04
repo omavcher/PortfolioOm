@@ -325,7 +325,7 @@ export default function AboutClient() {
                       className="w-full h-auto select-none pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] transition-all duration-300 group-hover:rotate-2"
                       style={{
                         WebkitUserDrag: "none",
-                      }}
+                      } as React.CSSProperties & { WebkitUserDrag?: "none" | "element" | "auto" | "inherit" }}
                     />
 
                     {/* Hover Floating Card Tooltip */}
