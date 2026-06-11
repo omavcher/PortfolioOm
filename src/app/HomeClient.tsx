@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import GitHubHeatmap from "@/components/GitHubHeatmap";
+import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
 import {
   Heart, Code2, Download, Cpu, ExternalLink,
   Github, Linkedin, Code, Trophy, Globe,
@@ -17,6 +18,21 @@ import {
 
 const PROJECTS = [
   {
+    id: "pocketmind",
+    title: "PocketMind",
+    subtitle: "Offline-First Personal AI",
+    desc: "A premium, offline-first personal AI assistant mobile application that runs high-performance LLMs entirely on-device. OCR and document querying (RAG) in a 100% private environment.",
+    tags: ["Flutter", "Dart", "C++", "Android", "Firebase", "Google ML Kit"],
+    logo: null,
+    liveUrl: "https://github.com/omavcher/PortfolioOm/releases/download/v1.0.0/pocketmind.apk",
+    githubUrl: null,
+    caseStudy: null,
+    stat: { label: "Offline & Private", value: "100%" },
+    accent: "bg-violet-50 border-violet-200",
+    accentColor: "text-violet-600",
+    isMobile: true,
+  },
+  {
     id: "heartecho",
     title: "HeartEcho",
     subtitle: "AI Companion Platform",
@@ -29,6 +45,7 @@ const PROJECTS = [
     stat: { label: "Users Served", value: "550K+" },
     accent: "bg-pink-50 border-pink-200",
     accentColor: "text-pink-600",
+    isMobile: false,
   },
   {
     id: "paperxify",
@@ -43,6 +60,7 @@ const PROJECTS = [
     stat: { label: "Generation Time", value: "~7s" },
     accent: "bg-red-50 border-red-200",
     accentColor: "text-red-600",
+    isMobile: false,
   },
   {
     id: "social-manager",
@@ -57,6 +75,7 @@ const PROJECTS = [
     stat: { label: "Platforms", value: "2+" },
     accent: "bg-emerald-50 border-emerald-200",
     accentColor: "text-emerald-600",
+    isMobile: false,
   },
 ];
 
@@ -364,6 +383,7 @@ const TICKER_ITEMS = [
 // ─── HOME STICKY PROJECTS ─────────────────────────────────────────────────────
 
 const HOME_PROJ_GRADIENTS = [
+  { from: "#1e0b36", to: "#0a0314", accent: "#8b5cf6" }, // Violet gradient for PocketMind
   { from: "#db2777", to: "#5b0e2d", accent: "#ec4899" }, // Pink gradient for HeartEcho
   { from: "#be123c", to: "#7f1d1d", accent: "#f43f5e" }, // Red gradient for PaperXify
   { from: "#065f46", to: "#022c22", accent: "#10b981" }, // Green gradient for Social Manager
@@ -385,15 +405,17 @@ const FAN_ENTERS = [
 const FAN_DELAYS = [0.24, 0.15, 0.06];
 
 const HOME_PROJ_IMAGES: Record<number, string[]> = {
-  0: ["/projects/heartecho-3.png", "/projects/heartecho-2.png", "/projects/heartecho-1.png"],
-  1: ["/projects/paperxify-3.png", "/projects/paperxify-2.png", "/projects/paperxify-1.png"],
-  2: ["/projects/social-1.png", "/projects/social-2.png", "/projects/social-3.png"],
+  0: ["/projects/pocketmind-3.jpg", "/projects/pocketmind-2.jpg", "/projects/pocketmind-1.jpg"],
+  1: ["/projects/heartecho-3.png", "/projects/heartecho-2.png", "/projects/heartecho-1.png"],
+  2: ["/projects/paperxify-3.png", "/projects/paperxify-2.png", "/projects/paperxify-1.png"],
+  3: ["/projects/social-1.png", "/projects/social-2.png", "/projects/social-3.png"],
 };
 
 const HOME_PROJ_LABELS: Record<number, string[]> = {
-  0: ["caliing", "chat ui", "landing"],
-  1: ["pricing", "output", "landing"],
-  2: ["dashboard", "generator", "scheduler"],
+  0: ["chat ui", "models", "splash"],
+  1: ["caliing", "chat ui", "landing"],
+  2: ["pricing", "output", "landing"],
+  3: ["dashboard", "generator", "scheduler"],
 };
 
 function HomeProjScreen({ projIdx, slotIdx }: { projIdx: number; slotIdx: number }) {
@@ -483,10 +505,10 @@ function HomePreviewCard({
           <p className="text-white font-bold text-sm leading-snug max-w-[200px]">{proj.desc}</p>
           <div className="flex gap-1.5 shrink-0">
             {proj.liveUrl && (
-              <a href={proj.liveUrl} target="_blank" rel="noreferrer"
+              <a href={proj.liveUrl} target={proj.isMobile ? undefined : "_blank"} rel="noreferrer" download={proj.isMobile ? "pocketmind.apk" : undefined}
                 className="w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                 style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)" }}>
-                <ArrowRight size={13} className="text-white" />
+                {proj.isMobile ? <Download size={13} className="text-white" /> : <ArrowRight size={13} className="text-white" />}
               </a>
             )}
             {proj.githubUrl && (
@@ -500,7 +522,7 @@ function HomePreviewCard({
         </div>
       </div>
       {/* Fan windows */}
-      <div className="px-4 pb-4 relative" style={{ paddingTop }}>
+      <div className="px-4 pb-4 relative" style={{ paddingTop: proj.isMobile ? "105%" : paddingTop }}>
         <div className="absolute inset-0 flex items-center justify-center">
           {FAN_SLOTS.map((slot, si) => {
             const posIdx = getPositionIndex(si, topSlotIdx);
@@ -510,7 +532,7 @@ function HomePreviewCard({
               <motion.div
                 key={si}
                 className="absolute cursor-pointer"
-                style={{ width: "76%", zIndex: posStyles.z, willChange: "transform" }}
+                style={{ width: proj.isMobile ? "48%" : "76%", zIndex: posStyles.z, willChange: "transform" }}
                 initial={{ ...FAN_ENTERS[si] }}
                 whileInView={{
                   x: posStyles.x,
@@ -531,16 +553,38 @@ function HomePreviewCard({
                 }}
               >
                 <div className="rounded-xl overflow-hidden transition-shadow duration-300" style={{ boxShadow: posStyles.shadow, border: "1.5px solid rgba(255,255,255,0.12)" }}>
-                  <div className="flex items-center gap-1 px-2.5 py-1.5" style={{ background: "rgba(0,0,0,0.5)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-                    <div className="w-1.5 h-1.5 rounded-full bg-red-400/70" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-400/70" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-400/70" />
-                    <div className="ml-1.5 flex-1 rounded-sm px-1.5 py-0.5 text-[6px] font-mono text-white/25 truncate" style={{ background: "rgba(255,255,255,0.06)" }}>
-                      {HOME_PROJ_LABELS[projIdx]?.[si] || "preview"}
+                  {proj.isMobile ? (
+                    <div className="flex items-center justify-between px-2.5 py-1 text-[5px] text-white/60 font-sans select-none"
+                      style={{ backgroundColor: "rgba(0,0,0,0.85)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                      <div className="flex items-center gap-1 font-mono">
+                        <span>11:22</span>
+                        <div className="flex gap-0.5 items-end h-1">
+                          <div className="w-[0.5px] h-[0.5px] bg-white/60" />
+                          <div className="w-[0.5px] h-[0.8px] bg-white/60" />
+                          <div className="w-[0.5px] h-[1.2px] bg-white/60" />
+                        </div>
+                      </div>
+                      <div className="w-7 h-1.5 bg-black rounded-full border border-white/5" />
+                      <div className="flex items-center gap-1 font-mono">
+                        <span>5G</span>
+                        <span>29%</span>
+                      </div>
                     </div>
-                  </div>
-                  <div style={{ aspectRatio: "16/9", overflow: "hidden" }}>
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1.5" style={{ background: "rgba(0,0,0,0.5)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+                      <div className="w-1.5 h-1.5 rounded-full bg-red-400/70" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-400/70" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-400/70" />
+                      <div className="ml-1.5 flex-1 rounded-sm px-1.5 py-0.5 text-[6px] font-mono text-white/25 truncate" style={{ background: "rgba(255,255,255,0.06)" }}>
+                        {HOME_PROJ_LABELS[projIdx]?.[si] || "preview"}
+                      </div>
+                    </div>
+                  )}
+                  <div style={{ aspectRatio: proj.isMobile ? "9/16" : "16/9", position: "relative", overflow: "hidden" }}>
                     <HomeProjScreen projIdx={projIdx} slotIdx={si} />
+                    {proj.isMobile && (
+                      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-white/30 rounded-full pointer-events-none" />
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -620,10 +664,11 @@ function HomeProjDetail({ proj, idx }: { proj: typeof PROJECTS[0]; idx: number }
       {/* Action buttons */}
       <div className="flex flex-wrap gap-2.5">
         {proj.liveUrl && (
-          <a href={proj.liveUrl} target="_blank" rel="noreferrer"
+          <a href={proj.liveUrl} target={proj.isMobile ? undefined : "_blank"} rel="noreferrer" download={proj.isMobile ? "pocketmind.apk" : undefined}
             className="flex items-center gap-1.5 px-5 py-2.5 font-mono text-[9px] font-black uppercase text-white hover:opacity-90 transition-opacity"
             style={{ backgroundColor: g.accent }}>
-            <Globe size={11}/> Live Site
+            {proj.isMobile ? <Download size={11}/> : <Globe size={11}/>}
+            {proj.isMobile ? "Download APK" : "Live Site"}
           </a>
         )}
         {proj.githubUrl && (
@@ -772,6 +817,76 @@ function HomeStickyProjects() {
   );
 }
 
+// ─── AVATAR PIXELATED CANVAS ──────────────────────────────────────────────────
+
+function AvatarPixelated() {
+  const [isPixelated, setIsPixelated] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [canvasSize, setCanvasSize] = useState({ width: 320, height: 400 });
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        setCanvasSize({ width: Math.round(width), height: Math.round(height) });
+      }
+    });
+    resizeObserver.observe(containerRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="aspect-[4/5] bg-slate-100 border-2 border-black overflow-hidden relative cursor-pointer select-none group"
+      onMouseEnter={() => setIsPixelated(true)}
+      onMouseLeave={() => setIsPixelated(false)}
+      onClick={() => setIsPixelated((prev) => !prev)}
+    >
+      {/* Normal Image */}
+      <img
+        src="./my.avif"
+        className={`w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 ${
+          isPixelated ? "opacity-0 scale-105" : "opacity-100 scale-100"
+        }`}
+        alt="Om Avchar"
+      />
+
+      {/* Pixelated Canvas Overlay */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-700 ${
+          isPixelated ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {canvasSize.width > 0 && (
+          <PixelatedCanvas
+            src="./my.avif"
+            width={canvasSize.width}
+            height={canvasSize.height}
+            cellSize={3}
+            dotScale={0.95}
+            shape="square"
+            backgroundColor="#ffffff"
+            dropoutStrength={0.1}
+            interactive={isPixelated}
+            distortionStrength={2.5}
+            distortionRadius={45}
+            distortionMode="swirl"
+            followSpeed={0.25}
+            jitterStrength={2}
+            jitterSpeed={3}
+            sampleAverage
+            tintColor="#3b82f6"
+            tintStrength={0.08}
+            className="w-full h-full object-cover"
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 
 export default function HomeClient() {
@@ -888,13 +1003,7 @@ export default function HomeClient() {
                 className="relative"
               >
                 <div className="w-56 sm:w-72 md:w-80 bg-white border-2 border-black paper-shadow p-3 sm:p-4">
-                  <div className="aspect-[4/5] bg-slate-100 border-2 border-black overflow-hidden group">
-                    <img
-                      src="./my.avif"
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-                      alt="Om Avchar"
-                    />
-                  </div>
+                  <AvatarPixelated />
                   <div className="mt-3 text-center">
                     <p className="handwritten text-xl sm:text-2xl font-bold italic">Software Engineer</p>
                     <p className="font-mono text-[8px] text-slate-400 uppercase tracking-widest mt-1">Nagpur, India · 2026</p>

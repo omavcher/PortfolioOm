@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, Globe, Lock, ArrowRight } from "lucide-react";
+import { Github, Globe, Lock, ArrowRight, Download } from "lucide-react";
 
 // ── Tech Icons ────────────────────────────────────────────────────────────────
 
@@ -25,13 +25,39 @@ const TECH_ICONS: Record<string, string> = {
   "Tailwind CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
   "Framer Motion":"https://cdn.worldvectorlogo.com/logos/framer-motion.svg",
   "Microservices":"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg",
+  "Flutter":      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg",
+  "Dart":         "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg",
+  "C++":          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
+  "Android":      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg",
+  "Firebase":     "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-original.svg",
 };
 
 // ── Projects ──────────────────────────────────────────────────────────────────
 
 const PROJECTS = [
   {
-    num: "01", category: "AI Platform", date: "2024 – 2026",
+    num: "01", category: "Mobile App · Offline AI", date: "2026",
+    title: "PocketMind", subtitle: "Offline-First Personal AI",
+    tagline: "AI Power. Offline. Private. Yours.",
+    desc: "A premium, offline-first personal AI assistant mobile application that runs high-performance LLMs entirely on-device. It allows users to query their local documents (PDF, DOCX, Excel) and images (via OCR) in a 100% private environment without sending data to external servers.",
+    features: [
+      { label: "On-Device LLM Inference", detail: "Embedded fllama engine (llama.cpp port) executing quantized GGUF models on-device with optimized contexts up to 4096 tokens" },
+      { label: "Smart Document RAG", detail: "Parses PDF, DOCX, and Excel formats locally to inject text dynamically into the model's chat context" },
+      { label: "On-Device OCR Engine", detail: "Integrates Google ML Kit for offline image text transcription and processing directly on-device" },
+      { label: "Offline-Safe Sync Queue", detail: "Buffers analytics and engagement events locally in SharedPreferences, batch syncing to Firestore and Sheets when online" },
+    ],
+    stats: [{ val: "100%", label: "Private/Offline" }, { val: "5+", label: "Architectures" }, { val: "0", label: "Server Cost" }],
+    tags: ["Flutter", "Dart", "C++", "Android", "Firebase", "Google ML Kit"],
+    images: [
+      { src: "/projects/pocketmind-3.jpg", label: "chat ui" },
+      { src: "/projects/pocketmind-2.jpg", label: "models" },
+      { src: "/projects/pocketmind-1.jpg", label: "landing" },
+    ],
+    liveUrl: "https://github.com/omavcher/PortfolioOm/releases/download/v1.0.0/pocketmind.apk", githubUrl: null,
+    isPrivate: true, from: "#1e0b36", to: "#0a0314", accentHex: "#8b5cf6", isMobile: true,
+  },
+  {
+    num: "02", category: "AI Platform", date: "2024 – 2026",
     title: "HeartEcho", subtitle: "AI Companion Platform",
     tagline: "An AI companion platform that scaled to 550,000+ active users",
     desc: "I built the entire backend from scratch — a custom Priority Queue for AI scheduling, Redis Emotional Cache with sub-12ms retrieval, and Nginx load balancing with sticky sessions across 4 Node.js clusters.",
@@ -49,10 +75,10 @@ const PROJECTS = [
       { src: "/projects/heartecho-1.png", label: "landing" },
     ],
     liveUrl: "https://www.heartecho.in", githubUrl: "https://github.com/omavcher/heartecho",
-    isPrivate: false, from: "#db2777", to: "#5b0e2d", accentHex: "#ec4899",
+    isPrivate: false, from: "#db2777", to: "#5b0e2d", accentHex: "#ec4899", isMobile: false,
   },
   {
-    num: "02", category: "EdTech · AI", date: "2024",
+    num: "03", category: "EdTech · AI", date: "2024",
     title: "PaperXify", subtitle: "AI Note Generator",
     tagline: "8-hour YouTube lectures → structured PDF notes in under 8 seconds",
     desc: "Parallel LLM pipelines chunk transcripts and call OpenAI simultaneously. Puppeteer renders pixel-perfect PDFs with auto table of contents — entire pipeline completes in <8 seconds.",
@@ -70,10 +96,10 @@ const PROJECTS = [
       { src: "/projects/paperxify-1.png", label: "landing" },
     ],
     liveUrl: null, githubUrl: "https://github.com/omavcher/yt-notes",
-    isPrivate: false, from: "#be123c", to: "#7f1d1d", accentHex: "#f43f5e",
+    isPrivate: false, from: "#be123c", to: "#7f1d1d", accentHex: "#f43f5e", isMobile: false,
   },
   {
-    num: "03", category: "AI SaaS", date: "2025",
+    num: "04", category: "AI SaaS", date: "2025",
     title: "Social Manager", subtitle: "Autonomous Content Engine",
     tagline: "Zero human input — trend analysis, content generation, and publishing on autopilot",
     desc: "Monitors real-time trends on Instagram and X, generates brand-aligned content via AI agents, and orchestrates publishing across platforms — entirely without human intervention.",
@@ -91,10 +117,10 @@ const PROJECTS = [
       { src: "/projects/social-3.png", label: "Scheduler" },
     ],
     liveUrl: null, githubUrl: null,
-    isPrivate: true, from: "#065f46", to: "#022c22", accentHex: "#10b981",
+    isPrivate: true, from: "#065f46", to: "#022c22", accentHex: "#10b981", isMobile: false,
   },
   {
-    num: "04", category: "Portfolio", date: "2026",
+    num: "05", category: "Portfolio", date: "2026",
     title: "This Portfolio", subtitle: "Next.js + MDX + Paper Theme",
     tagline: "Zero-database portfolio with a custom paper design system and live GitHub integration",
     desc: "Next.js App Router + MDX for blog posts, case studies, and research. A fully custom sketchbook design system — paper textures, ink borders, handwriting fonts — with scroll-driven Framer Motion animations.",
@@ -112,7 +138,7 @@ const PROJECTS = [
       { src: "/projects/portfolio-3.png",                               label: "Blog"   },
     ],
     liveUrl: null, githubUrl: "https://github.com/omavcher",
-    isPrivate: false, from: "#3730a3", to: "#1e1b4b", accentHex: "#6366f1",
+    isPrivate: false, from: "#3730a3", to: "#1e1b4b", accentHex: "#6366f1", isMobile: false,
   },
 ];
 
@@ -189,7 +215,7 @@ function ImageSlot({ src, label, accent, projIdx, slotIdx, isPrivate }: {
     setFailed(false);
   }, [src]);
 
-  if (isPrivate || failed || !imgSrc) {
+  if (failed || !imgSrc) {
     return <PlaceholderScreen accent={accent} projIdx={projIdx} slotIdx={slotIdx} />;
   }
 
@@ -270,7 +296,7 @@ function StablePreviewCard({ proj, projIdx }: { proj: typeof PROJECTS[0]; projId
   return (
     <div
       className="relative w-full overflow-visible"
-      style={{ paddingTop: "65%" }}
+      style={{ paddingTop: proj.isMobile ? "110%" : "65%" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -286,7 +312,7 @@ function StablePreviewCard({ proj, projIdx }: { proj: typeof PROJECTS[0]; projId
             <motion.div
               key={si}                            // stable key — never remounts
               className="absolute cursor-pointer"
-              style={{ width: "76%", zIndex: posStyles.z, willChange: "transform" }}
+              style={{ width: proj.isMobile ? "48%" : "76%", zIndex: posStyles.z, willChange: "transform" }}
               initial={enter.initial}
               animate={{
                 x: posStyles.x,
@@ -305,25 +331,45 @@ function StablePreviewCard({ proj, projIdx }: { proj: typeof PROJECTS[0]; projId
                 setTopSlotIdx(si);
               }}
             >
-              {/* Browser chrome — stable, never animates */}
+              {/* Browser/Mobile chrome — stable, never animates */}
               <div
                 className="rounded-xl overflow-hidden"
                 style={{ boxShadow: posStyles.shadow, border: "1.5px solid rgba(255,255,255,0.12)" }}
               >
-                {/* Title bar */}
-                <div className="flex items-center gap-1.5 px-3 py-2"
-                  style={{ backgroundColor: "rgba(0,0,0,0.5)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-                  <div className="w-2 h-2 rounded-full bg-red-400/70" />
-                  <div className="w-2 h-2 rounded-full bg-yellow-400/70" />
-                  <div className="w-2 h-2 rounded-full bg-green-400/70" />
-                  <div className="ml-2 flex-1 rounded-sm px-2 py-0.5 text-[6px] font-mono text-white/25 truncate"
-                    style={{ backgroundColor: "rgba(255,255,255,0.06)" }}>
-                    {img.label}
+                {/* Header: Notch/Traffic-lights */}
+                {proj.isMobile ? (
+                  <div className="flex items-center justify-between px-2.5 py-1 text-[5px] text-white/60 font-sans select-none"
+                    style={{ backgroundColor: "rgba(0,0,0,0.85)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                    <div className="flex items-center gap-1 font-mono">
+                      <span>11:22</span>
+                      <div className="flex gap-0.5 items-end h-1">
+                        <div className="w-[0.5px] h-[0.5px] bg-white/60" />
+                        <div className="w-[0.5px] h-[0.8px] bg-white/60" />
+                        <div className="w-[0.5px] h-[1.2px] bg-white/60" />
+                      </div>
+                    </div>
+                    {/* Notch */}
+                    <div className="w-7 h-1.5 bg-black rounded-full border border-white/5" />
+                    <div className="flex items-center gap-1 font-mono">
+                      <span>5G</span>
+                      <span>29%</span>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 px-3 py-2"
+                    style={{ backgroundColor: "rgba(0,0,0,0.5)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+                    <div className="w-2 h-2 rounded-full bg-red-400/70" />
+                    <div className="w-2 h-2 rounded-full bg-yellow-400/70" />
+                    <div className="w-2 h-2 rounded-full bg-green-400/70" />
+                    <div className="ml-2 flex-1 rounded-sm px-2 py-0.5 text-[6px] font-mono text-white/25 truncate"
+                      style={{ backgroundColor: "rgba(255,255,255,0.06)" }}>
+                      {img.label}
+                    </div>
+                  </div>
+                )}
 
                 {/* Image area: ONLY this crossfades when project changes */}
-                <div style={{ aspectRatio: "16/9", position: "relative", overflow: "hidden" }}>
+                <div style={{ aspectRatio: proj.isMobile ? "9/16" : "16/9", position: "relative", overflow: "hidden" }}>
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={`${projIdx}-${si}`}    // keyed by project: triggers crossfade
@@ -344,6 +390,10 @@ function StablePreviewCard({ proj, projIdx }: { proj: typeof PROJECTS[0]; projId
                       />
                     </motion.div>
                   </AnimatePresence>
+                  {/* Home Indicator for Mobile */}
+                  {proj.isMobile && (
+                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-white/30 rounded-full pointer-events-none" />
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -394,10 +444,10 @@ function StickyCard({ activeIdx }: { activeIdx: number }) {
 
             <div className="flex gap-2 shrink-0">
               {proj.liveUrl && (
-                <a href={proj.liveUrl} target="_blank" rel="noreferrer"
+                <a href={proj.liveUrl} target={proj.isMobile ? undefined : "_blank"} rel="noreferrer" download={proj.isMobile ? "pocketmind.apk" : undefined}
                   className="w-9 h-9 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                   style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)" }}>
-                  <ArrowRight size={14} className="text-white" />
+                  {proj.isMobile ? <Download size={14} className="text-white" /> : <ArrowRight size={14} className="text-white" />}
                 </a>
               )}
               {proj.githubUrl && (
@@ -486,10 +536,11 @@ function ProjectDetail({ proj }: { proj: typeof PROJECTS[0] }) {
 
       <div className="flex flex-wrap gap-2">
         {proj.liveUrl && (
-          <a href={proj.liveUrl} target="_blank" rel="noreferrer"
+          <a href={proj.liveUrl} target={proj.isMobile ? undefined : "_blank"} rel="noreferrer" download={proj.isMobile ? "pocketmind.apk" : undefined}
             className="flex items-center gap-1.5 px-4 py-2.5 font-mono text-[9px] font-black uppercase text-white paper-shadow hover:opacity-90 transition-opacity"
             style={{ backgroundColor: proj.accentHex }}>
-            <Globe size={11} /> Live Site
+            {proj.isMobile ? <Download size={11} /> : <Globe size={11} />}
+            {proj.isMobile ? "Download APK" : "Live Site"}
           </a>
         )}
         {proj.githubUrl && (
@@ -607,7 +658,7 @@ export default function ProjectsClient() {
                 <div className="p-5 pb-2">
                   <p className="text-white font-bold text-base leading-snug mb-3">{p.tagline}</p>
                   <div className="flex gap-2">
-                    {p.liveUrl   && <a href={p.liveUrl}   target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.25)" }}><ArrowRight size={12} className="text-white"/></a>}
+                    {p.liveUrl   && <a href={p.liveUrl}   target={p.isMobile ? undefined : "_blank"} rel="noreferrer" download={p.isMobile ? "pocketmind.apk" : undefined} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.25)" }}>{p.isMobile ? <Download size={12} className="text-white"/> : <ArrowRight size={12} className="text-white"/>}</a>}
                     {p.githubUrl && <a href={p.githubUrl} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.25)" }}><Github size={12} className="text-white"/></a>}
                     {p.isPrivate && <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-full font-mono text-[7px] uppercase text-white/50" style={{ background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.12)" }}><Lock size={7}/> Private</div>}
                   </div>

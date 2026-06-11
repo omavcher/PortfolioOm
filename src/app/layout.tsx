@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Architects_Daughter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SecurityGuard from "@/components/SecurityGuard";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -119,6 +120,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Paper Grain Overlay */}
         <div className="fixed inset-0 pointer-events-none opacity-20 mix-blend-multiply z-[150] bg-[url('https://www.transparenttextures.com/patterns/notebook.png')]"></div>
 
+        <SecurityGuard />
         <Navbar />
         <main className="relative min-h-screen">
           {children}

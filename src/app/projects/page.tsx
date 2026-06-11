@@ -6,16 +6,19 @@ const BASE = "https://omavchar.space";
 export const metadata: Metadata = {
   title: "Projects | Om Avchar — Scaled Systems & AI Apps",
   description:
-    "Explore the systems built by Om Avchar: HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
+    "Explore the systems built by Om Avchar: PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
   keywords: [
     "Om Avchar projects",
+    "PocketMind AI",
     "HeartEcho AI",
     "PaperXify",
     "AI Companion Platform backend",
+    "Offline-first mobile LLM",
     "Node.js scaled systems",
     "Redis caching systems",
     "Nginx sticky sessions",
     "Kafka event driven architecture",
+    "Flutter llama.cpp Android app",
   ],
   alternates: {
     canonical: `${BASE}/projects`,
@@ -23,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Projects | Om Avchar — Scaled Systems & AI Apps",
     description:
-      "Explore the systems built by Om Avchar: HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
+      "Explore the systems built by Om Avchar: PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
     url: `${BASE}/projects`,
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Projects by Om Avchar" }],
   },
@@ -31,7 +34,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Projects | Om Avchar — Scaled Systems & AI Apps",
     description:
-      "Explore the systems built by Om Avchar: HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
+      "Explore the systems built by Om Avchar: PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
     images: ["/og-image.png"],
   },
 };
@@ -46,6 +49,14 @@ export default function ProjectsPage() {
       {
         "@type": "SoftwareApplication",
         "position": 1,
+        "name": "PocketMind",
+        "description": "Offline-first personal AI assistant mobile application running quantized GGUF models on-device with smart document querying and local OCR.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Android",
+      },
+      {
+        "@type": "SoftwareApplication",
+        "position": 2,
         "name": "HeartEcho",
         "description": "AI companion platform scaled to 550k+ users with custom priority queues, Redis caching, and real-time WebSockets.",
         "applicationCategory": "MultimediaApplication",
@@ -53,7 +64,7 @@ export default function ProjectsPage() {
       },
       {
         "@type": "SoftwareApplication",
-        "position": 2,
+        "position": 3,
         "name": "PaperXify",
         "description": "AI-powered tool that summarizes 8-hour YouTube lectures into PDF notes in under 8 seconds using parallel LLM chunking.",
         "applicationCategory": "EducationalApplication",
@@ -61,7 +72,7 @@ export default function ProjectsPage() {
       },
       {
         "@type": "SoftwareApplication",
-        "position": 3,
+        "position": 4,
         "name": "Social Manager",
         "description": "Autonomous trend monitoring, content generation, and publishing engine powered by AI agents and Kafka event bus.",
         "applicationCategory": "BusinessApplication",

@@ -62,6 +62,20 @@ const EXPERIENCE = [
 
 const PROJECTS = [
   {
+    name: "PocketMind",
+    tagline: "Offline-First Personal AI",
+    url: "Download APK",
+    href: "https://github.com/omavcher/PortfolioOm/releases/download/v1.0.0/pocketmind.apk",
+    accent: "#8b5cf6",
+    stack: ["Flutter", "Dart", "C++ (llama.cpp)", "Google ML Kit", "Firebase", "SharedPreferences"],
+    metric: { val: "100%", label: "Offline & Private" },
+    bullets: [
+      "Integrated fllama (a Flutter port of llama.cpp C++ bindings) to run quantized GGUF language models directly on mobile devices with context limits up to 4096 tokens, optimized parameters, and offline generation.",
+      "Built a secure, custom native platform channel (com.pocketmind.app/storage) to bridge Dart with native Android storage API, providing real-time diagnostics (Free vs Total space) to prevent model download overhead.",
+      "Designed a zero-loss background analytics buffering system using SharedPreferences, queuing client usage logs locally and batch syncing with Cloud Firestore and Google Sheets macros once internet connection is restored.",
+    ],
+  },
+  {
     name: "HeartEcho",
     tagline: "AI Companion Platform",
     url: "heartecho.in",
