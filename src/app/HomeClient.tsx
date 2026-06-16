@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import GitHubHeatmap from "@/components/GitHubHeatmap";
+import LeetCodeHeatmap from "@/components/LeetCodeHeatmap";
+import LeetCodeStatsCard from "@/components/LeetCodeStatsCard";
 import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
 import {
   Heart, Code2, Download, Cpu, ExternalLink,
@@ -889,9 +891,29 @@ function AvatarPixelated() {
 
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 
-export default function HomeClient() {
+interface HomeClientProps {
+  initialLeetcodeData?: any;
+}
+
+export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
+  const [leetcodeData, setLeetcodeData] = useState(initialLeetcodeData);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    // Keep data fresh by fetching from client proxy
+    fetch("/api/leetcode")
+      .then((res) => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then((data) => {
+        if (data && data.matchedUser) {
+          setLeetcodeData(data);
+        }
+      })
+      .catch((err) => console.error("Client side LeetCode fetch failed:", err));
+  }, []);
   const [popup, setPopup] = useState({ visible: false, message: "", type: "" });
   const [activeTool, setActiveTool] = useState(0);
 
@@ -983,7 +1005,11 @@ export default function HomeClient() {
               <div className="flex flex-wrap gap-5 sm:gap-8 font-mono border-t-2 border-dashed border-slate-200 pt-6">
                 {[
                   { label: "Users Served", val: "550K+", color: "text-red-600" },
-                  { label: "LeetCode Rating", val: "1,396", color: "text-orange-600" },
+                  { 
+                    label: "LeetCode Solved", 
+                    val: leetcodeData?.matchedUser?.submitStatsGlobal?.acSubmissionNum?.find((x: any) => x.difficulty === "All")?.count?.toString() || "140", 
+                    color: "text-orange-600" 
+                  },
                   { label: "Hackathons Won", val: "5+", color: "text-blue-600" },
                 ].map((s) => (
                   <div key={s.label}>
@@ -1390,7 +1416,9 @@ export default function HomeClient() {
           <div className="mt-4 flex items-center gap-3 border-2 border-black px-4 py-3 bg-white" style={{ boxShadow: "3px 3px 0 #dc2626" }}>
             <Trophy size={14} className="text-red-600 shrink-0" />
             <p className="font-mono text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-700">
-              LeetCode Rating: <span className="text-red-600">1,396</span>
+              LeetCode Solved: <span className="text-red-600">
+                {leetcodeData?.matchedUser?.submitStatsGlobal?.acSubmissionNum?.find((x: any) => x.difficulty === "All")?.count || 140} / {leetcodeData?.allQuestionsCount?.find((x: any) => x.difficulty === "All")?.count || 3962}
+              </span>
               <span className="text-slate-400 mx-2">·</span>
               Competitive Programming
               <span className="text-slate-400 mx-2">·</span>
@@ -1467,6 +1495,84 @@ export default function HomeClient() {
 
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════
+          § LEETCODE ACTIVITY & STATS
+      ══════════════════════════════════════════ */}
+      {leetcodeData && leetcodeData.matchedUser && (
+        <section id="leetcode" className="py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24" style={{ backgroundColor: "#fafaf7" }}>
+          <div className="max-w-5xl mx-auto border-t-2 border-dashed border-slate-200 pt-16 sm:pt-24">
+            {/* Header row */}
+            <div className="section-label mb-4">DSA &amp; Problem Solving</div>
+            <div className="flex items-end justify-between mb-10 sm:mb-12 gap-4">
+              <h2 className="section-heading">LeetCode<br />Activity</h2>
+              <a href={`https://leetcode.com/u/${leetcodeData.matchedUser.username}/`} target="_blank" rel="noreferrer"
+                className="hidden sm:flex btn-primary text-xs px-4 py-2.5 shrink-0 gap-2 font-bold" style={{ backgroundColor: "#ffa116", borderColor: "black" }}>
+                <Trophy size={12} /> LeetCode Profile
+              </a>
+            </div>
+
+            {/* LeetCode Stats Card */}
+            <div className="mb-8">
+              <LeetCodeStatsCard data={leetcodeData} />
+            </div>
+
+            {/* Heatmap Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5 }}
+              className="border-2 border-black bg-white paper-shadow overflow-hidden"
+            >
+              {/* Card header */}
+              <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b-2 border-black" style={{ backgroundColor: "#fafaf7" }}>
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 border-2 border-black flex items-center justify-center bg-white" style={{ borderColor: "#ffa116" }}>
+                    <Trophy size={13} className="text-orange-500" />
+                  </div>
+                  <a href={`https://leetcode.com/u/${leetcodeData.matchedUser.username}/`} target="_blank" rel="noreferrer"
+                    className="font-mono font-black text-[9px] sm:text-[10px] uppercase tracking-widest text-slate-800 hover:text-black flex items-center gap-1.5 transition-colors">
+                    leetcode.com/{leetcodeData.matchedUser.username}
+                    <ExternalLink size={8} className="text-slate-400" />
+                  </a>
+                </div>
+                <div className="flex items-center gap-1.5 bg-black text-white px-2.5 py-1 font-mono text-[7px] font-black uppercase tracking-widest">
+                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
+                  Live Stats
+                </div>
+              </div>
+
+              {/* Heatmap */}
+              <div className="p-4 sm:p-6 md:p-8 bg-white overflow-x-auto no-scrollbar">
+                <LeetCodeHeatmap 
+                  submissionCalendarString={leetcodeData.matchedUser.userCalendar.submissionCalendar}
+                  streak={leetcodeData.matchedUser.userCalendar.streak}
+                  totalActiveDays={leetcodeData.matchedUser.userCalendar.totalActiveDays}
+                />
+              </div>
+
+              {/* Footer */}
+              <div className="px-4 sm:px-6 py-3 border-t-2 border-dashed border-slate-200 flex items-center justify-between gap-2 flex-wrap" style={{ backgroundColor: "#fafaf7" }}>
+                <span className="font-mono text-[8px] text-slate-400 uppercase tracking-widest font-bold">
+                  leetcode.com/graphql · refreshes hourly
+                </span>
+                <a href={`https://leetcode.com/u/${leetcodeData.matchedUser.username}/`} target="_blank" rel="noreferrer"
+                  className="font-mono text-[8px] font-black uppercase tracking-widest text-slate-700 hover:text-black transition-colors flex items-center gap-1">
+                  Solve Problems <ArrowRight size={9} />
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Mobile CTA */}
+            <div className="mt-5 sm:hidden">
+              <a href={`https://leetcode.com/u/${leetcodeData.matchedUser.username}/`} target="_blank" rel="noreferrer" className="btn-primary w-full justify-center text-xs gap-2" style={{ backgroundColor: "#ffa116", borderColor: "black" }}>
+                <Trophy size={13} /> View LeetCode Profile
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ══════════════════════════════════════════
           § HONORS & AWARDS

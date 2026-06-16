@@ -119,7 +119,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${geistSans.variable} ${geistMono.variable} ${handwriting.variable} antialiased bg-[#f5f5f5] text-slate-900`}>
         {/* Paper Grain Overlay */}
         <div className="fixed inset-0 pointer-events-none opacity-20 mix-blend-multiply z-[150] bg-[url('https://www.transparenttextures.com/patterns/notebook.png')]"></div>
-
         <SecurityGuard />
         <Navbar />
         <main className="relative min-h-screen">
