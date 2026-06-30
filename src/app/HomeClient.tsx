@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
+import {
+  fadeUp, fadeIn, slideLeft, slideRight, scaleUp, popIn, clipReveal, stampIn, drawLine,
+  staggerContainer, staggerFast, staggerNormal, staggerSlow, sectionHeader,
+  VIEWPORT_ONCE, VIEWPORT_REPEAT, VIEWPORT_LAZY, VIEWPORT_EARLY,
+} from "@/lib/motion";
 import Link from "next/link";
 import GitHubHeatmap from "@/components/GitHubHeatmap";
 import LeetCodeHeatmap from "@/components/LeetCodeHeatmap";
@@ -967,29 +972,37 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
         <div className="w-full max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
-            {/* Left */}
-            <div className="order-2 lg:order-1">
-              <div className="section-label mb-5 text-xs">
+            {/* Left — staggered entrance */}
+            <motion.div
+              className="order-2 lg:order-1"
+              variants={staggerNormal}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.div variants={fadeUp} className="section-label mb-5 text-xs">
                 <span className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   Available for opportunities
                 </span>
-              </div>
+              </motion.div>
 
-              <h1 className="handwritten text-[3.8rem] sm:text-[5.5rem] lg:text-[7.5rem] font-bold tracking-tighter leading-[0.85] text-slate-900 mb-5">
+              <motion.h1
+                variants={stampIn}
+                className="handwritten text-[3.8rem] sm:text-[5.5rem] lg:text-[7.5rem] font-bold tracking-tighter leading-[0.85] text-slate-900 mb-5"
+              >
                 Om<br />Avchar
-              </h1>
+              </motion.h1>
 
-              <p className="font-mono text-[11px] sm:text-xs font-black uppercase tracking-[0.15em] text-blue-600 border-l-4 border-blue-600 pl-3 mb-6">
+              <motion.p variants={fadeUp} className="font-mono text-[11px] sm:text-xs font-black uppercase tracking-[0.15em] text-blue-600 border-l-4 border-blue-600 pl-3 mb-6">
                 &gt; Backend Engineer // System Designer // AI Builder
-              </p>
+              </motion.p>
 
-              <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-8 max-w-lg">
+              <motion.p variants={fadeUp} className="text-slate-600 text-base sm:text-lg leading-relaxed mb-8 max-w-lg">
                 I build systems that <strong className="text-slate-900">scale to hundreds of thousands of users</strong>. Specializing in high-concurrency architectures, AI pipelines, and distributed infrastructure.
-              </p>
+              </motion.p>
 
               {/* CTA buttons */}
-              <div className="flex flex-wrap gap-2 sm:gap-3 mb-8">
+              <motion.div variants={fadeUp} className="flex flex-wrap gap-2 sm:gap-3 mb-8">
                 <button onClick={handleResumeDownload} className="btn-primary text-xs px-4 py-2.5">
                   <Download size={13} /> Download CV
                 </button>
@@ -999,10 +1012,10 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                 <a href="https://linkedin.com/in/omawchar" target="_blank" rel="noreferrer" className="btn-outline text-xs px-4 py-2.5">
                   <Linkedin size={13} /> LinkedIn
                 </a>
-              </div>
+              </motion.div>
 
-              {/* Stats row */}
-              <div className="flex flex-wrap gap-5 sm:gap-8 font-mono border-t-2 border-dashed border-slate-200 pt-6">
+              {/* Stats row — each stat pops in */}
+              <motion.div variants={staggerFast} className="flex flex-wrap gap-5 sm:gap-8 font-mono border-t-2 border-dashed border-slate-200 pt-6">
                 {[
                   { label: "Users Served", val: "550K+", color: "text-red-600" },
                   { 
@@ -1012,22 +1025,22 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                   },
                   { label: "Hackathons Won", val: "5+", color: "text-blue-600" },
                 ].map((s) => (
-                  <div key={s.label}>
+                  <motion.div key={s.label} variants={popIn}>
                     <div className={`text-xl sm:text-2xl font-black ${s.color}`}>{s.val}</div>
                     <div className="text-[8px] sm:text-[9px] uppercase tracking-widest text-slate-500 font-bold mt-0.5">{s.label}</div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            {/* Right — photo card */}
-            <div className="order-1 lg:order-2 flex justify-center">
-              <motion.div
-                initial={{ rotate: 5 }}
-                animate={{ rotate: -1.5 }}
-                transition={{ duration: 2.5, ease: "easeInOut" }}
-                className="relative"
-              >
+            {/* Right — photo card floats in from right */}
+            <motion.div
+              className="order-1 lg:order-2 flex justify-center"
+              initial={{ opacity: 0, x: 60, rotate: 8 }}
+              animate={{ opacity: 1, x: 0, rotate: -1.5 }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            >
+              <div className="relative">
                 <div className="w-56 sm:w-72 md:w-80 bg-white border-2 border-black paper-shadow p-3 sm:p-4">
                   <AvatarPixelated />
                   <div className="mt-3 text-center">
@@ -1035,35 +1048,43 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                     <p className="font-mono text-[8px] text-slate-400 uppercase tracking-widest mt-1">Nagpur, India · 2026</p>
                   </div>
                 </div>
-                <div className="absolute -top-3 -right-3 bg-black text-white px-2.5 py-1.5 font-mono text-[8px] font-black uppercase paper-shadow rotate-3">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.7, rotate: -5 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 3 }}
+                  transition={{ delay: 0.7, duration: 0.5, type: "spring", stiffness: 300 }}
+                  className="absolute -top-3 -right-3 bg-black text-white px-2.5 py-1.5 font-mono text-[8px] font-black uppercase paper-shadow"
+                >
                   Open to Work
-                </div>
-                <div className="absolute -bottom-2 -left-2 bg-emerald-400 border-2 border-black px-2.5 py-1.5 font-mono text-[8px] font-black uppercase -rotate-2">
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.7, rotate: 5 }}
+                  animate={{ opacity: 1, scale: 1, rotate: -2 }}
+                  transition={{ delay: 0.85, duration: 0.5, type: "spring", stiffness: 300 }}
+                  className="absolute -bottom-2 -left-2 bg-emerald-400 border-2 border-black px-2.5 py-1.5 font-mono text-[8px] font-black uppercase"
+                >
                   CS Student
-                </div>
-              </motion.div>
-            </div>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
 
         {/* Scroll indicator — only on large screens */}
-        <div className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-[8px] uppercase text-slate-400 tracking-widest flex-col items-center gap-2">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 0.6 }}
+          className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-[8px] uppercase text-slate-400 tracking-widest flex-col items-center gap-2"
+        >
           <div className="w-5 h-8 border-2 border-slate-400 rounded-full flex justify-center p-1">
             <motion.div
-              animate={{
-                y: [0, 12],
-                opacity: [1, 0],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
+              animate={{ y: [0, 12], opacity: [1, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               className="w-1 h-1.5 bg-slate-400 rounded-full"
             />
           </div>
           Scroll
-        </div>
+        </motion.div>
       </section>
 
       {/* ── TICKER ── */}
@@ -1083,14 +1104,27 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
       ══════════════════════════════════════════ */}
       <section id="about" className="py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24">
         <div className="max-w-7xl mx-auto">
-          <div className="section-label mb-4">About Me</div>
-          <h2 className="section-heading mb-10 sm:mb-14">Who I Am</h2>
+          <motion.div
+            variants={sectionHeader}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
+            <motion.div variants={fadeUp} className="section-label mb-4">About Me</motion.div>
+            <motion.h2 variants={stampIn} className="section-heading mb-10 sm:mb-14">Who I Am</motion.h2>
+          </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-            {/* Bio */}
-            <div className="lg:col-span-2 paper-sheet paper-shadow p-6 sm:p-8 md:p-10 space-y-4 text-base text-slate-700 leading-relaxed">
+            {/* Bio — slides in from left */}
+            <motion.div
+              className="lg:col-span-2 paper-sheet paper-shadow p-6 sm:p-8 md:p-10 space-y-4 text-base text-slate-700 leading-relaxed"
+              variants={slideLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT_ONCE}
+            >
               <p>
-                I&apos;m a <span className="bg-emerald-100 border border-emerald-300 px-1.5 font-bold text-slate-900">Backend-heavy Full-Stack Engineer</span> and Computer Science student at GWCET, Nagpur — obsessed with building systems that work at <span className="bg-blue-100 border border-blue-300 px-1.5 font-bold text-slate-900">massive scale</span>.
+                I&apos;m a <span className="bg-emerald-100 border border-emerald-300 px-1.5 font-bold text-slate-900">Backend-heavy Full-Stack Engineer</span> and Computer Science student at GWCET, Nagpur — obsessed with building systems that <span className="bg-blue-100 border border-blue-300 px-1.5 font-bold text-slate-900">massive scale</span>.
               </p>
               <p>
                 I specialize in <strong>distributed system design</strong>, high-concurrency Node.js architectures, AI pipeline engineering, and database optimization. My flagship project HeartEcho scaled from zero to <strong>550,000+ users</strong> using a custom Priority Queue + Redis Emotional Cache system I designed from scratch.
@@ -1106,10 +1140,16 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                   Projects <ChevronRight size={12} />
                 </Link>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Stat cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
+            {/* Stat cards — stagger pop in from right */}
+            <motion.div
+              className="grid grid-cols-2 lg:grid-cols-1 gap-3"
+              variants={staggerNormal}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT_ONCE}
+            >
               {[
                 { icon: <Users size={18} className="text-red-500" />, val: "550,000+", label: "Users Served", bg: "bg-red-50" },
                 { icon: <Trophy size={18} className="text-yellow-500" />, val: "5+", label: "Hackathon Placements", bg: "bg-yellow-50" },
@@ -1118,6 +1158,7 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
               ].map((stat) => (
                 <motion.div
                   key={stat.label}
+                  variants={popIn}
                   whileHover={{ x: 3, y: -3 }}
                   className={`paper-flat paper-shadow p-4 ${stat.bg} flex items-center gap-3`}
                 >
@@ -1130,7 +1171,7 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                   </div>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -1145,28 +1186,39 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
       ══════════════════════════════════════════ */}
       <section id="experience" className="py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24" style={{ backgroundColor: "#fafaf7" }}>
         <div className="max-w-5xl mx-auto">
-          <div className="section-label mb-4">Work</div>
-          <div className="flex items-end justify-between mb-10 sm:mb-14 gap-4">
-            <h2 className="section-heading">Experience<br />Ledger</h2>
-            <div className="hidden sm:block font-mono text-[9px] font-black uppercase tracking-widest text-slate-400">
-              {EXPERIENCE.length} Internships
+          <motion.div
+            variants={sectionHeader}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
+            <motion.div variants={fadeUp} className="section-label mb-4">Work</motion.div>
+            <div className="flex items-end justify-between mb-10 sm:mb-14 gap-4">
+              <motion.h2 variants={stampIn} className="section-heading">Experience<br />Ledger</motion.h2>
+              <motion.div variants={fadeIn} className="hidden sm:block font-mono text-[9px] font-black uppercase tracking-widest text-slate-400">
+                {EXPERIENCE.length} Internships
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           <div className="space-y-0">
             {EXPERIENCE.map((exp, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true, margin: "-60px" }}
-                transition={{ delay: i * 0.1, duration: 0.55, ease: "easeOut" }}
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.14, delayChildren: i * 0.08 } },
+                }}
                 className="group relative"
               >
-                {/* Main card */}
-                <div
+                {/* Main card — left and right panels slide from opposite sides */}
+                <motion.div
                   className="border-2 border-black bg-white overflow-hidden transition-transform duration-300 group-hover:-translate-y-1"
                   style={{ boxShadow: `4px 4px 0 ${exp.accent}`, marginBottom: "1.5rem" }}
+                  variants={scaleUp}
                 >
                   <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr]">
 
@@ -1258,7 +1310,7 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                     </div>
 
                   </div>
-                </div>
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -1270,14 +1322,21 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
       ══════════════════════════════════════════ */}
       <section id="education" className="py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24" style={{ backgroundColor: "#fafaf7" }}>
         <div className="max-w-5xl mx-auto">
-          <div className="section-label mb-4">Education</div>
-          <div className="flex items-end justify-between mb-8 sm:mb-12 gap-4">
-            <h2 className="section-heading">Academic<br />Ledger</h2>
-            <div className="flex items-center gap-2 font-mono text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400">
-              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500 animate-pulse" />
-              {EDUCATION.filter(e => e.status === "Pursuing").length} Active
+          <motion.div
+            variants={sectionHeader}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
+            <motion.div variants={fadeUp} className="section-label mb-4">Education</motion.div>
+            <div className="flex items-end justify-between mb-8 sm:mb-12 gap-4">
+              <motion.h2 variants={stampIn} className="section-heading">Academic<br />Ledger</motion.h2>
+              <motion.div variants={popIn} className="flex items-center gap-2 font-mono text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-400">
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500 animate-pulse" />
+                {EDUCATION.filter(e => e.status === "Pursuing").length} Active
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Horizontal timeline — always 3 columns, shrinks on mobile */}
           <div className="relative">
@@ -1286,15 +1345,20 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
             <div className="absolute top-[20px] sm:top-[24px] left-0 right-0 h-px bg-black z-0" style={{ top: "20px" }} />
 
             {/* 3-col grid — no responsive breakpoints, always a row */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-6">
+            <motion.div
+              className="grid grid-cols-3 gap-2 sm:gap-6"
+              variants={staggerNormal}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT_ONCE}
+            >
               {EDUCATION.map((edu, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ delay: i * 0.12, duration: 0.5, ease: "easeOut" }}
+                  variants={scaleUp}
                   className="flex flex-col"
+                  whileHover={{ y: -6 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
                   {/* Timeline dot */}
                   <div className={`flex ${i === 0 ? "justify-start" : i === 1 ? "justify-center" : "justify-end"} mb-3 sm:mb-4 relative z-10`}>
@@ -1337,7 +1401,7 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                   </div>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -1347,23 +1411,37 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
       ══════════════════════════════════════════ */}
       <section id="toolbox" className="py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24">
         <div className="max-w-5xl mx-auto">
-          <div className="section-label mb-4">Skills</div>
-          <div className="flex items-end justify-between mb-10 sm:mb-14 gap-4">
-            <h2 className="section-heading">My<br />Toolbox</h2>
-            <div className="hidden sm:block font-mono text-[9px] font-black uppercase tracking-widest text-slate-400">
-              {TECH_CATEGORIES.reduce((a, c) => a + c.items.length, 0)}+ Technologies
+          <motion.div
+            variants={sectionHeader}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
+            <motion.div variants={fadeUp} className="section-label mb-4">Skills</motion.div>
+            <div className="flex items-end justify-between mb-10 sm:mb-14 gap-4">
+              <motion.h2 variants={stampIn} className="section-heading">My<br />Toolbox</motion.h2>
+              <motion.div variants={fadeIn} className="hidden sm:block font-mono text-[9px] font-black uppercase tracking-widest text-slate-400">
+                {TECH_CATEGORIES.reduce((a, c) => a + c.items.length, 0)}+ Technologies
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Full skills map — all categories always visible */}
-          <div className="border-2 border-black bg-white" style={{ boxShadow: "4px 4px 0 #000" }}>
+          {/* Full skills map — rows clip-reveal one by one */}
+          <motion.div
+            className="border-2 border-black bg-white"
+            style={{ boxShadow: "4px 4px 0 #000" }}
+            variants={scaleUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
             {TECH_CATEGORIES.map((cat, ci) => (
               <motion.div
                 key={cat.category}
-                initial={{ opacity: 0, x: -16 }}
+                initial={{ opacity: 0, x: -24 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ delay: ci * 0.06, duration: 0.4 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ delay: ci * 0.055, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                 className={`flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-0 p-4 sm:p-5 ${
                   ci < TECH_CATEGORIES.length - 1 ? "border-b-2 border-black" : ""
                 }`}
@@ -1410,7 +1488,7 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {/* LeetCode callout */}
           <div className="mt-4 flex items-center gap-3 border-2 border-black px-4 py-3 bg-white" style={{ boxShadow: "3px 3px 0 #dc2626" }}>
@@ -1435,20 +1513,29 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
         <div className="max-w-5xl mx-auto">
 
           {/* Header row */}
-          <div className="section-label mb-4">Code &amp; Commits</div>
-          <div className="flex items-end justify-between mb-10 sm:mb-12 gap-4">
-            <h2 className="section-heading">GitHub<br />Activity</h2>
-            <a href="https://github.com/omavcher" target="_blank" rel="noreferrer"
-              className="hidden sm:flex btn-primary text-xs px-4 py-2.5 shrink-0">
-              <Github size={12} /> Profile
-            </a>
-          </div>
+          <motion.div
+            variants={sectionHeader}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
+            <motion.div variants={fadeUp} className="section-label mb-4">Code &amp; Commits</motion.div>
+            <div className="flex items-end justify-between mb-10 sm:mb-12 gap-4">
+              <motion.h2 variants={stampIn} className="section-heading">GitHub<br />Activity</motion.h2>
+              <motion.a
+                variants={popIn}
+                href="https://github.com/omavcher" target="_blank" rel="noreferrer"
+                className="hidden sm:flex btn-primary text-xs px-4 py-2.5 shrink-0">
+                <Github size={12} /> Profile
+              </motion.a>
+            </div>
+          </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.5 }}
+            variants={scaleUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
             className="border-2 border-black bg-white paper-shadow overflow-hidden"
           >
             {/* Card header — paper bar */}
@@ -1579,23 +1666,34 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
       ══════════════════════════════════════════ */}
       <section id="honors" className="py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24" style={{ backgroundColor: "#fafaf7" }}>
         <div className="max-w-5xl mx-auto">
-          <div className="section-label mb-4">Achievements</div>
-          <div className="flex items-end justify-between mb-10 sm:mb-14">
-            <h2 className="section-heading">Honors &<br />Awards</h2>
-            <div className="hidden sm:flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-widest text-slate-400">
-              <Award size={11} /> {HONORS.length} Achievements
+          <motion.div
+            variants={sectionHeader}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
+            <motion.div variants={fadeUp} className="section-label mb-4">Achievements</motion.div>
+            <div className="flex items-end justify-between mb-10 sm:mb-14">
+              <motion.h2 variants={stampIn} className="section-heading">Honors &<br />Awards</motion.h2>
+              <motion.div variants={popIn} className="hidden sm:flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-widest text-slate-400">
+                <Award size={11} /> {HONORS.length} Achievements
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Awards list */}
-          <div className="border-2 border-black bg-white" style={{ boxShadow: "4px 4px 0 #000" }}>
+          <motion.div
+            className="border-2 border-black bg-white"
+            style={{ boxShadow: "4px 4px 0 #000" }}
+            variants={staggerNormal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
             {HONORS.map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ delay: i * 0.08, duration: 0.45 }}
+                variants={slideLeft}
                 className={`group relative ${
                   i < HONORS.length - 1 ? "border-b-2 border-black" : ""
                 }`}
@@ -1677,12 +1775,18 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Upload CTA */}
-          <p className="mt-4 font-mono text-[8px] text-slate-400 uppercase tracking-widest text-center">
-            Proof images & certificates — drop files in <span className="text-slate-600 font-black">/public/</span> and link via <span className="text-slate-600 font-black">proofImg</span> or <span className="text-slate-600 font-black">proofPdf</span>
-          </p>
+          <motion.p
+            variants={fadeIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_LAZY}
+            className="mt-4 font-mono text-[8px] text-slate-400 uppercase tracking-widest text-center"
+          >
+            Proof images &amp; certificates — drop files in <span className="text-slate-600 font-black">/public/</span> and link via <span className="text-slate-600 font-black">proofImg</span> or <span className="text-slate-600 font-black">proofPdf</span>
+          </motion.p>
 
         </div>
       </section>
@@ -1692,27 +1796,49 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
       ══════════════════════════════════════════ */}
       <section id="contact" className="py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24" style={{ backgroundColor: "#f8fafc" }}>
         <div className="max-w-2xl mx-auto">
-          <div className="section-label mb-4">Contact</div>
-          <h2 className="section-heading mb-3">Get In Touch</h2>
-          <p className="text-slate-500 font-mono text-sm mb-8 sm:mb-10">
-            System design problem, AI project, internship, or just want to connect?
-          </p>
+          <motion.div
+            variants={sectionHeader}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
+            <motion.div variants={fadeUp} className="section-label mb-4">Contact</motion.div>
+            <motion.h2 variants={stampIn} className="section-heading mb-3">Get In Touch</motion.h2>
+            <motion.p variants={fadeUp} className="text-slate-500 font-mono text-sm mb-8 sm:mb-10">
+              System design problem, AI project, internship, or just want to connect?
+            </motion.p>
+          </motion.div>
 
-          {/* Quick links */}
-          <div className="flex flex-wrap gap-3 mb-8">
+          {/* Quick links — stagger pop in */}
+          <motion.div
+            className="flex flex-wrap gap-3 mb-8"
+            variants={staggerFast}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+          >
             {[
               { icon: <Mail size={12} />, label: "Email", href: "mailto:omavchar@gmail.com" },
               { icon: <Github size={12} />, label: "GitHub", href: "https://github.com/omavcher" },
               { icon: <Linkedin size={12} />, label: "LinkedIn", href: "https://linkedin.com/in/omawchar" },
             ].map((link) => (
-              <a key={link.label} href={link.href} target="_blank" rel="noreferrer"
+              <motion.a
+                key={link.label}
+                variants={popIn}
+                href={link.href} target="_blank" rel="noreferrer"
                 className="flex items-center gap-1.5 px-3 py-2 border-2 border-black font-mono text-[9px] font-black uppercase hover:bg-black hover:text-white transition-all">
                 {link.icon} {link.label}
-              </a>
+              </motion.a>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="paper-sheet paper-shadow p-5 sm:p-8 bg-white">
+          <motion.div
+            variants={scaleUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT_ONCE}
+            className="paper-sheet paper-shadow p-5 sm:p-8 bg-white"
+          >
             <form onSubmit={handleFormSubmit} className="space-y-4 sm:space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
@@ -1756,7 +1882,7 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
               </span>
               <span>2026</span>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 

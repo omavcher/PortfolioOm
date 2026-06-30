@@ -149,10 +149,20 @@ const STICKERS = [
     id: "leetcode-2026",
     name: "LeetCode 50 Days Badge 2026!",
     description: "SOLVING PROBLEMS 50+ DAYS IN 2026",
-    image: "/leetcode_2026_badge.png",
+    image: "/badges/leetcode_2026_badge.png",
     initialRotation: -3,
-    left: "40%",
-    top: "20%",
+    left: "30%",
+    top: "15%",
+    sizeClass: "w-[90px] sm:w-[115px] md:w-[130px]",
+  },
+  {
+    id: "leetcode-june-2026",
+    name: "LeetCode June Challenge 2026!",
+    description: "LEETCODE JUNE CHALLENGE 2026",
+    image: "/badges/leetcode_june_2026.png",
+    initialRotation: 5,
+    left: "55%",
+    top: "15%",
     sizeClass: "w-[90px] sm:w-[115px] md:w-[130px]",
   }
 ];
