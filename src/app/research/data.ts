@@ -20,6 +20,7 @@ export interface ResearchPaper {
   status: string;
   pdfUrl: string;
   presentationUrl: string;
+  journalUrl?: string;
   abstract: string;
   outcomes: string[];
   keyFindings: { label: string; val: string }[];
@@ -39,7 +40,7 @@ export const RESEARCH: ResearchPaper[] = [
   {
     id: "papertube-review",
     title: "A REVIEW PAPER ON PAPERTUB YOUTUBE VIDEO LINK TO NOTES MAKER",
-    subtitle: "Presented at ICRTSET-2026 · CS & Engineering",
+    subtitle: "Published in VIIRJ (Special Issue) · Vol. 2026 · ISSN 2319-4979",
     desc: "An AI-powered automated learning system that transforms educational video URLs into structured, visual, and interactive Socratic study guides.",
     tags: [
       "Artificial Intelligence",
@@ -52,9 +53,10 @@ export const RESEARCH: ResearchPaper[] = [
     cover: "/research/papertube-cover.png",
     accent: "#2563eb",
     year: "2026",
-    status: "Presented",
-    pdfUrl: "/research/papertube-review-papertube.pdf",
+    status: "Published",
+    pdfUrl: "https://www.viirj.org/specialissues/2026/SP2603/27.pdf",
     presentationUrl: "https://www.linkedin.com/posts/omavchar_innovation-ai-icrtset2026-activity-7449741427384745984-Dp6m",
+    journalUrl: "https://www.viirj.org/specialissues/2026/SP2603/SP2603.html",
     linkedinEmbedUrl: "https://www.linkedin.com/embed/feed/update/urn:li:share:7449741427384745984",
     abstract:
       "The rapid growth of video-based learning platforms such as YouTube has transformed modern education by providing students with easy access to lectures, tutorials, and academic resources. However, this shift has introduced a significant challenge known as the Information Capture Gap, where students struggle to convert long video lectures into structured and concise study materials. Traditional note-taking methods require frequent pausing, rewinding, and manual transcription, which disrupts cognitive flow and reduces learning efficiency. This research proposes PaperTube, an AI-powered automated learning system designed to transform educational video URLs into structured and visually enhanced study notes. The system is developed using the MENN stack and integrates multiple artificial intelligence models to automate the process of lecture analysis and knowledge extraction. The platform utilizes Google Gemini for abstractive text summarization, Whisper-based speech-to-text processing for generating transcripts from audio streams, and Hugging Face models to create context-aware visual diagrams that support visual learning. Additionally, the system integrates a LLaMA-powered conversational module that enables students to interact with the generated notes through a Socratic question-answering interface. Unlike traditional transcription tools that produce unstructured text, PaperTube focuses on generating hierarchical, timestamped, and aesthetically formatted PDF study notes that mirror the way students naturally organize information while studying. The system also incorporates cloud synchronization using the Google Drive API to allow seamless storage and retrieval of generated notes. Experimental comparisons with manual note-taking methods demonstrate that the proposed system significantly reduces the time required to generate study material while improving organization, accessibility, and knowledge retention. By combining artificial intelligence, natural language processing, and modern web technologies, PaperTube provides a scalable solution for transforming passive video consumption into an active and efficient learning experience.",

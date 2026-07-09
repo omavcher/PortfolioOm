@@ -6,7 +6,7 @@ import { useState } from "react";
 import {
   ArrowLeft, FileText, FlaskConical,
   Target, ChevronDown, ChevronUp,
-  Calendar, Tag, Presentation
+  Calendar, Tag, Presentation, Globe
 } from "lucide-react";
 import type { ResearchPaper } from "../data";
 
@@ -360,6 +360,13 @@ export default function ResearchDetailClient({ paper }: { paper: Paper }) {
                   className="flex items-center gap-2 w-full px-4 py-3 border-2 border-black font-mono text-[9px] font-black uppercase tracking-wider hover:bg-black hover:text-white transition-all"
                   style={{ boxShadow: "2px 2px 0 #000" }}>
                   <Presentation size={12} /> View Slides
+                </a>
+              )}
+              {paper.journalUrl && (
+                <a href={paper.journalUrl} target="_blank" rel="noreferrer"
+                  className="flex items-center gap-2 w-full px-4 py-3 border-2 border-black font-mono text-[9px] font-black uppercase tracking-wider hover:bg-black hover:text-white transition-all"
+                  style={{ boxShadow: "2px 2px 0 #000" }}>
+                  <Globe size={12} /> View Journal
                 </a>
               )}
               <Link href="/#contact"
