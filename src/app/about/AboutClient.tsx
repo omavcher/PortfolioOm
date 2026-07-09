@@ -157,7 +157,7 @@ const STICKERS = [
   },
   {
     id: "leetcode-100-2026",
-    name: "Congratulations 100 Days Badge 2026!",
+    name: "LeetCode 100 Days Badge 2026!",
     description: "SOLVING PROBLEMS 100+ DAYS IN 2026",
     image: "/badges/leetcode_2026_100days_badge.png",
     initialRotation: 2,
@@ -182,6 +182,11 @@ const STICKERS = [
 export default function AboutClient() {
   const arenaRef = useRef<HTMLDivElement>(null);
   const [activeStickerId, setActiveStickerId] = useState<string | null>(null);
+  const [resetKey, setResetKey] = useState(0);
+
+  const handleReset = () => {
+    setResetKey(prev => prev + 1);
+  };
 
 
 
@@ -291,9 +296,6 @@ export default function AboutClient() {
       {/* ══════════════════════════════════════════
           § SCRAPBOOK ARENA
       ══════════════════════════════════════════ */}
-      {/* ══════════════════════════════════════════
-          § SCRAPBOOK ARENA
-      ══════════════════════════════════════════ */}
       <section className="py-8 sm:py-12 px-4 sm:px-6 md:px-12 lg:px-24 border-b-2 border-black" style={{ backgroundColor: "#fafaf7" }}>
         <div className="max-w-5xl mx-auto">
           <div className="section-label mb-2">Scrapbook</div>
@@ -303,91 +305,138 @@ export default function AboutClient() {
                 My Arena
               </h2>
               <p className="font-mono text-[9px] uppercase tracking-wider text-slate-400">
-                Drag badges around. They will snap back to their spots!
+                Drag badges anywhere. Click RESET ARENA to return them!
               </p>
             </div>
           </div>
 
           {/* Arena Board */}
           <div 
-            ref={arenaRef}
-            className="border-2 border-black bg-white rounded-lg relative h-[200px] sm:h-[240px] md:h-[260px] overflow-visible select-none cursor-default"
+            className="border-2 border-black bg-white rounded-none relative overflow-visible select-none cursor-default flex flex-col"
             style={{ 
-              boxShadow: "3px 3px 0 #000",
-              backgroundImage: "radial-gradient(#cbd5e1 1.5px, transparent 1.5px)",
-              backgroundSize: "20px 20px"
+              boxShadow: "4px 4px 0 #000",
             }}
           >
-            {/* Draggable Stickers */}
-            {STICKERS.map((sticker) => {
-              const isActive = activeStickerId === sticker.id;
+            {/* Board Header */}
+            <div className="border-b-2 border-black bg-zinc-100 px-4 py-2 flex items-center justify-between font-mono text-[10px] font-black uppercase tracking-wider text-black">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500 border border-black shadow-[1px_1px_0_#000]"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400 border border-black shadow-[1px_1px_0_#000]"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border border-black shadow-[1px_1px_0_#000]"></span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Terminal size={10} />
+                <span>INTERACTIVE BADGES ARENA</span>
+              </div>
+              <button 
+                onClick={handleReset}
+                className="flex items-center gap-1 border-2 border-black bg-yellow-300 hover:bg-black hover:text-white px-2 py-0.5 transition-colors cursor-pointer text-[9px] font-black shadow-[1px_1px_0_#000] hover:shadow-none translate-y-[0px] active:translate-y-[1px]"
+              >
+                RESET ARENA
+              </button>
+            </div>
 
-              return (
-                <motion.div
-                  key={sticker.id}
-                  drag
-                  dragConstraints={arenaRef}
-                  dragElastic={0.5}
-                  dragSnapToOrigin={true}
-                  dragTransition={{ bounceStiffness: 600, bounceDamping: 25 }}
-                  whileDrag={{ scale: 1.1, rotate: 0, zIndex: 100 }}
-                  whileHover={{ scale: 1.05, zIndex: 50 }}
-                  initial={{ 
-                    x: 0, 
-                    y: 0, 
-                    rotate: sticker.initialRotation 
-                  }}
-                  style={{
-                    position: "absolute",
-                    left: sticker.left,
-                    top: sticker.top,
-                    cursor: "grab",
-                  }}
-                  className={`touch-none flex flex-col items-center group ${sticker.sizeClass}`}
-                  onMouseEnter={() => setActiveStickerId(sticker.id)}
-                  onMouseLeave={() => setActiveStickerId(null)}
-                  onTapStart={() => setActiveStickerId(sticker.id)}
-                >
-                  <div className="relative w-full flex flex-col items-center">
-                    {/* Sticker Shadow */}
-                    <div className="absolute inset-0 bg-black/10 blur-[3px] rounded-full scale-95 translate-y-1 transition-transform group-hover:translate-y-2" />
-                    
-                    {/* Sticker Image */}
-                    <img 
-                      src={sticker.image} 
-                      alt={sticker.name}
-                      className="w-full h-auto select-none pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] transition-all duration-300 group-hover:rotate-2"
-                      style={{
-                        WebkitUserDrag: "none",
-                      } as React.CSSProperties & { WebkitUserDrag?: "none" | "element" | "auto" | "inherit" }}
-                    />
+            {/* Board Content Area */}
+            <div 
+              ref={arenaRef}
+              className="relative w-full h-[220px] sm:h-[260px] md:h-[280px] overflow-visible"
+              style={{ 
+                backgroundImage: "radial-gradient(#cbd5e1 1.5px, transparent 1.5px)",
+                backgroundSize: "20px 20px"
+              }}
+            >
+              {/* Draggable Stickers */}
+              {STICKERS.map((sticker) => {
+                const isActive = activeStickerId === sticker.id;
 
-                    {/* Hover Floating Card Tooltip */}
-                    <AnimatePresence>
-                      {isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 8, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                          className="absolute top-[105%] z-50 w-[160px] sm:w-[200px] bg-zinc-900 border border-black text-white p-3 rounded-md shadow-lg pointer-events-none text-center"
-                          style={{
-                            boxShadow: "3px 3px 0 #000",
-                          }}
-                        >
-                          <h4 className="font-mono text-[8px] font-black uppercase tracking-wider text-amber-500 mb-1">
-                            {sticker.name}
-                          </h4>
-                          <p className="text-[9px] sm:text-xs font-normal text-slate-200 leading-relaxed font-sans">
-                            {sticker.description}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </motion.div>
-              );
-            })}
+                return (
+                  <motion.div
+                    key={`${sticker.id}-${resetKey}`}
+                    drag
+                    dragConstraints={arenaRef}
+                    dragElastic={0.5}
+                    dragMomentum={true}
+                    dragTransition={{
+                      power: 0.08,
+                      timeConstant: 150,
+                    }}
+                    dragSnapToOrigin={false}
+                    whileDrag={{ scale: 1.12, rotate: 3, zIndex: 100 }}
+                    whileHover={{ scale: 1.06, rotate: sticker.initialRotation + 1, zIndex: 50 }}
+                    initial={{ 
+                      scale: 0.3,
+                      opacity: 0,
+                      x: 0, 
+                      y: 0, 
+                      rotate: 0
+                    }}
+                    animate={{
+                      scale: 1,
+                      opacity: 1,
+                      rotate: sticker.initialRotation
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 180,
+                      damping: 15
+                    }}
+                    style={{
+                      position: "absolute",
+                      left: sticker.left,
+                      top: sticker.top,
+                      cursor: "grab",
+                      willChange: "transform",
+                    }}
+                    className={`touch-none flex flex-col items-center group ${sticker.sizeClass}`}
+                    onMouseEnter={() => setActiveStickerId(sticker.id)}
+                    onMouseLeave={() => setActiveStickerId(null)}
+                    onTapStart={() => setActiveStickerId(sticker.id)}
+                  >
+                    <div className="relative w-full flex flex-col items-center">
+                      {/* Sticker Shadow - lifts when hovered or dragged */}
+                      <div className="absolute inset-0 bg-black/5 blur-[4px] rounded-full scale-90 translate-y-1.5 transition-all duration-300 group-hover:translate-y-3 group-hover:scale-95 group-hover:bg-black/10 group-active:translate-y-4 group-active:scale-100 group-active:bg-black/15 group-active:blur-[6px]" />
+                      
+                      {/* Sticker Image */}
+                      <img 
+                        src={sticker.image} 
+                        alt={sticker.name}
+                        decoding="async"
+                        className="w-full h-auto select-none pointer-events-none transition-all duration-300 group-hover:rotate-2"
+                        style={{
+                          WebkitUserDrag: "none",
+                        } as React.CSSProperties & { WebkitUserDrag?: "none" | "element" | "auto" | "inherit" }}
+                      />
+
+                      {/* Hover Floating Card Tooltip (Neo-brutalist theme) */}
+                      <AnimatePresence>
+                        {isActive && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10, scale: 0.9, rotate: -2 }}
+                            animate={{ opacity: 1, y: 0, scale: 1, rotate: 1 }}
+                            exit={{ opacity: 0, y: 10, scale: 0.9, rotate: -2 }}
+                            transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                            className="absolute top-[105%] z-50 w-[180px] sm:w-[220px] bg-yellow-50 border-2 border-black text-black p-3 rounded-none shadow-[3px_3px_0_#000] pointer-events-none text-left font-mono"
+                          >
+                            <div className="flex items-center gap-1.5 border-b border-black/20 pb-1 mb-1.5">
+                              <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
+                              <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">
+                                BADGE INFO
+                              </span>
+                            </div>
+                            <h4 className="text-[10px] font-black uppercase tracking-tight text-slate-900 leading-snug mb-1">
+                              {sticker.name}
+                            </h4>
+                            <p className="text-[9px] font-medium text-slate-700 leading-normal lowercase first-letter:uppercase">
+                              {sticker.description}
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
