@@ -6,9 +6,12 @@ const BASE = "https://omavchar.space";
 export const metadata: Metadata = {
   title: "Projects | Om Avchar — Scaled Systems & AI Apps",
   description:
-    "Explore the systems built by Om Avchar: PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
+    "Explore the systems built by Om Avchar: TryOff (AI Outfit, Hair & Beard Try-On mobile app live on Google Play), PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
   keywords: [
     "Om Avchar projects",
+    "TryOff AI",
+    "TryOff AI Outfit Try On",
+    "AI Virtual Outfit Try On",
     "PocketMind AI",
     "HeartEcho AI",
     "PaperXify",
@@ -26,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Projects | Om Avchar — Scaled Systems & AI Apps",
     description:
-      "Explore the systems built by Om Avchar: PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
+      "Explore the systems built by Om Avchar: TryOff (AI Outfit & Style Studio on Play Store), PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
     url: `${BASE}/projects`,
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Projects by Om Avchar" }],
   },
@@ -34,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Projects | Om Avchar — Scaled Systems & AI Apps",
     description:
-      "Explore the systems built by Om Avchar: PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
+      "Explore the systems built by Om Avchar: TryOff (AI Outfit & Style Studio on Play Store), PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
     images: ["/og-image.png"],
   },
 };
@@ -49,6 +52,15 @@ export default function ProjectsPage() {
       {
         "@type": "SoftwareApplication",
         "position": 1,
+        "name": "TryOff: AI Outfit Try On",
+        "description": "Complete AI style studio mobile app for virtual outfit try-on, hairstyle previews, beard styling, and skin analysis live on Google Play.",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Android",
+        "installUrl": "https://play.google.com/store/apps/details?id=com.tryoff.tryoff",
+      },
+      {
+        "@type": "SoftwareApplication",
+        "position": 2,
         "name": "PocketMind",
         "description": "Offline-first personal AI assistant mobile application running quantized GGUF models on-device with smart document querying and local OCR.",
         "applicationCategory": "UtilitiesApplication",
@@ -56,7 +68,7 @@ export default function ProjectsPage() {
       },
       {
         "@type": "SoftwareApplication",
-        "position": 2,
+        "position": 3,
         "name": "HeartEcho",
         "description": "AI companion platform scaled to 550k+ users with custom priority queues, Redis caching, and real-time WebSockets.",
         "applicationCategory": "MultimediaApplication",
@@ -64,15 +76,16 @@ export default function ProjectsPage() {
       },
       {
         "@type": "SoftwareApplication",
-        "position": 3,
+        "position": 4,
         "name": "PaperXify",
         "description": "AI-powered tool that summarizes 8-hour YouTube lectures into PDF notes in under 8 seconds using parallel LLM chunking.",
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "All",
+        "url": "https://paperxify.com",
       },
       {
         "@type": "SoftwareApplication",
-        "position": 4,
+        "position": 5,
         "name": "Social Manager",
         "description": "Autonomous trend monitoring, content generation, and publishing engine powered by AI agents and Kafka event bus.",
         "applicationCategory": "BusinessApplication",

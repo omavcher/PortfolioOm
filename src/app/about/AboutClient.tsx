@@ -62,6 +62,20 @@ const EXPERIENCE = [
 
 const PROJECTS = [
   {
+    name: "TryOff",
+    tagline: "AI Outfit, Hair & Beard Studio",
+    url: "Play Store",
+    href: "https://play.google.com/store/apps/details?id=com.tryoff.tryoff",
+    accent: "#a855f7",
+    stack: ["Flutter", "Android", "Computer Vision", "Generative AI", "Firebase", "Diffusion Models"],
+    metric: { val: "4-in-1", label: "AI Style Suite" },
+    bullets: [
+      "Engineered an all-in-one AI style studio mobile application unifying virtual outfit try-on, male/female hairstyle previews, facial hair styling, and AI skin health scanning into a single streamlined client.",
+      "Integrated diffusion-based generative pipelines with landmark detection and cloth physics to realistically blend uploaded clothing onto user photos, preserving lighting, shadows, and natural draping.",
+      "Designed an automated digital wardrobe and skin analyzer with categorized asset storage, before/after comparison sliders, and HD export capabilities, published live on Google Play Store.",
+    ],
+  },
+  {
     name: "PocketMind",
     tagline: "Offline-First Personal AI",
     url: "Download APK",

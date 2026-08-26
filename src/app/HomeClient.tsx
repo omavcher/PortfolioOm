@@ -25,6 +25,22 @@ import {
 
 const PROJECTS = [
   {
+    id: "tryoff",
+    title: "TryOff",
+    subtitle: "AI Outfit & Style Studio",
+    desc: "A complete 4-in-1 AI style studio mobile app: virtual outfit try-ons with realistic fabric drapery, hairstyle previews, beard styling aligned to jawline contours, and digital wardrobe.",
+    tags: ["Flutter", "Android", "Computer Vision", "Generative AI", "Firebase"],
+    logo: null,
+    liveUrl: "https://play.google.com/store/apps/details?id=com.tryoff.tryoff",
+    githubUrl: null,
+    caseStudy: null,
+    stat: { label: "AI Style Suite", value: "4-in-1" },
+    accent: "bg-purple-50 border-purple-200",
+    accentColor: "text-purple-600",
+    isMobile: true,
+    isPoster: true,
+  },
+  {
     id: "pocketmind",
     title: "PocketMind",
     subtitle: "Offline-First Personal AI",
@@ -38,6 +54,7 @@ const PROJECTS = [
     accent: "bg-violet-50 border-violet-200",
     accentColor: "text-violet-600",
     isMobile: true,
+    isPoster: false,
   },
   {
     id: "heartecho",
@@ -53,6 +70,7 @@ const PROJECTS = [
     accent: "bg-pink-50 border-pink-200",
     accentColor: "text-pink-600",
     isMobile: false,
+    isPoster: false,
   },
   {
     id: "paperxify",
@@ -61,13 +79,14 @@ const PROJECTS = [
     desc: "Converts 8-hour YouTube lectures into structured PDF notes in 7-8 seconds using parallel LLM pipelines and Google Drive API.",
     tags: ["MERN", "GenAI", "Google Drive API", "Puppeteer"],
     logo: null,
-    liveUrl: null,
+    liveUrl: "https://paperxify.com",
     githubUrl: "https://github.com/omavcher/yt-notes",
     caseStudy: null,
     stat: { label: "Generation Time", value: "~7s" },
     accent: "bg-red-50 border-red-200",
     accentColor: "text-red-600",
     isMobile: false,
+    isPoster: false,
   },
   {
     id: "social-manager",
@@ -83,6 +102,7 @@ const PROJECTS = [
     accent: "bg-emerald-50 border-emerald-200",
     accentColor: "text-emerald-600",
     isMobile: false,
+    isPoster: false,
   },
 ];
 
@@ -390,6 +410,7 @@ const TICKER_ITEMS = [
 // ─── HOME STICKY PROJECTS ─────────────────────────────────────────────────────
 
 const HOME_PROJ_GRADIENTS = [
+  { from: "#2a0845", to: "#0c0114", accent: "#a855f7" }, // Neon Purple gradient for TryOff
   { from: "#1e0b36", to: "#0a0314", accent: "#8b5cf6" }, // Violet gradient for PocketMind
   { from: "#db2777", to: "#5b0e2d", accent: "#ec4899" }, // Pink gradient for HeartEcho
   { from: "#be123c", to: "#7f1d1d", accent: "#f43f5e" }, // Red gradient for PaperXify
@@ -412,17 +433,19 @@ const FAN_ENTERS = [
 const FAN_DELAYS = [0.24, 0.15, 0.06];
 
 const HOME_PROJ_IMAGES: Record<number, string[]> = {
-  0: ["/projects/pocketmind-3.jpg", "/projects/pocketmind-2.jpg", "/projects/pocketmind-1.jpg"],
-  1: ["/projects/heartecho-3.png", "/projects/heartecho-2.png", "/projects/heartecho-1.png"],
-  2: ["/projects/paperxify-3.png", "/projects/paperxify-2.png", "/projects/paperxify-1.png"],
-  3: ["/projects/social-1.png", "/projects/social-2.png", "/projects/social-3.png"],
+  0: ["/projects/tryoff-2.webp", "/projects/tryoff-3.webp", "/projects/tryoff-1.webp"],
+  1: ["/projects/pocketmind-3.jpg", "/projects/pocketmind-2.jpg", "/projects/pocketmind-1.jpg"],
+  2: ["/projects/heartecho-3.png", "/projects/heartecho-2.png", "/projects/heartecho-1.png"],
+  3: ["/projects/paperxify-3.png", "/projects/paperxify-2.png", "/projects/paperxify-1.png"],
+  4: ["/projects/social-1.png", "/projects/social-2.png", "/projects/social-3.png"],
 };
 
 const HOME_PROJ_LABELS: Record<number, string[]> = {
-  0: ["chat ui", "models", "splash"],
-  1: ["caliing", "chat ui", "landing"],
-  2: ["pricing", "output", "landing"],
-  3: ["dashboard", "generator", "scheduler"],
+  0: ["hairstyles", "beard studio", "outfit try-on"],
+  1: ["chat ui", "models", "splash"],
+  2: ["caliing", "chat ui", "landing"],
+  3: ["pricing", "output", "landing"],
+  4: ["dashboard", "generator", "scheduler"],
 };
 
 function HomeProjScreen({ projIdx, slotIdx }: { projIdx: number; slotIdx: number }) {
@@ -498,6 +521,7 @@ function HomePreviewCard({
 }) {
   const [topSlotIdx, setTopSlotIdx] = useState(2);
   const [isHovered, setIsHovered] = useState(false);
+  const isPlayStore = proj.liveUrl?.includes("play.google.com");
 
   return (
     <div
@@ -512,10 +536,23 @@ function HomePreviewCard({
           <p className="text-white font-bold text-sm leading-snug max-w-[200px]">{proj.desc}</p>
           <div className="flex gap-1.5 shrink-0">
             {proj.liveUrl && (
-              <a href={proj.liveUrl} target={proj.isMobile ? undefined : "_blank"} rel="noreferrer" download={proj.isMobile ? "pocketmind.apk" : undefined}
+              <a
+                href={proj.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                download={isPlayStore ? undefined : (proj.isMobile ? "pocketmind.apk" : undefined)}
+                title={isPlayStore ? "View on Google Play" : (proj.isMobile ? "Download APK" : "Live Site")}
                 className="w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                 style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)" }}>
-                {proj.isMobile ? <Download size={13} className="text-white" /> : <ArrowRight size={13} className="text-white" />}
+                {isPlayStore ? (
+                  <svg className="w-3.5 h-3.5 fill-white shrink-0" viewBox="0 0 24 24">
+                    <path d="M3.609 1.814L13.793 12 3.61 22.186a1.956 1.956 0 0 1-.223-.976V2.79c0-.36.08-.7.222-.976zm11.242 11.244l2.585-2.585-11.83-6.75 9.245 9.335zm0 1.884l-9.245 9.335 11.83-6.75-2.585-2.585zm2.868-2.868l3.187 1.818c.954.545.954 1.433 0 1.978l-3.187 1.818-2.122-2.122 2.122-2.122z"/>
+                  </svg>
+                ) : proj.isMobile ? (
+                  <Download size={13} className="text-white" />
+                ) : (
+                  <ArrowRight size={13} className="text-white" />
+                )}
               </a>
             )}
             {proj.githubUrl && (
@@ -529,7 +566,7 @@ function HomePreviewCard({
         </div>
       </div>
       {/* Fan windows */}
-      <div className="px-4 pb-4 relative" style={{ paddingTop: proj.isMobile ? "105%" : paddingTop }}>
+      <div className="px-4 pb-4 relative" style={{ paddingTop: proj.isMobile ? (proj.isPoster ? "100%" : "105%") : paddingTop }}>
         <div className="absolute inset-0 flex items-center justify-center">
           {FAN_SLOTS.map((slot, si) => {
             const posIdx = getPositionIndex(si, topSlotIdx);
@@ -539,7 +576,7 @@ function HomePreviewCard({
               <motion.div
                 key={si}
                 className="absolute cursor-pointer"
-                style={{ width: proj.isMobile ? "48%" : "76%", zIndex: posStyles.z, willChange: "transform" }}
+                style={{ width: proj.isMobile ? (proj.isPoster ? "50%" : "48%") : "76%", zIndex: posStyles.z, willChange: "transform" }}
                 initial={{ ...FAN_ENTERS[si] }}
                 whileInView={{
                   x: posStyles.x,
@@ -559,24 +596,33 @@ function HomePreviewCard({
                   setTopSlotIdx(si);
                 }}
               >
-                <div className="rounded-xl overflow-hidden transition-shadow duration-300" style={{ boxShadow: posStyles.shadow, border: "1.5px solid rgba(255,255,255,0.12)" }}>
+                <div
+                  className="rounded-xl overflow-hidden transition-shadow duration-300"
+                  style={{
+                    boxShadow: posStyles.shadow,
+                    border: proj.isPoster ? "1.5px solid rgba(168,85,247,0.3)" : "1.5px solid rgba(255,255,255,0.12)",
+                    background: proj.isPoster ? "#080110" : undefined,
+                  }}
+                >
                   {proj.isMobile ? (
-                    <div className="flex items-center justify-between px-2.5 py-1 text-[5px] text-white/60 font-sans select-none"
-                      style={{ backgroundColor: "rgba(0,0,0,0.85)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                      <div className="flex items-center gap-1 font-mono">
-                        <span>11:22</span>
-                        <div className="flex gap-0.5 items-end h-1">
-                          <div className="w-[0.5px] h-[0.5px] bg-white/60" />
-                          <div className="w-[0.5px] h-[0.8px] bg-white/60" />
-                          <div className="w-[0.5px] h-[1.2px] bg-white/60" />
+                    proj.isPoster ? null : (
+                      <div className="flex items-center justify-between px-2.5 py-1 text-[5px] text-white/60 font-sans select-none"
+                        style={{ backgroundColor: "rgba(0,0,0,0.85)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                        <div className="flex items-center gap-1 font-mono">
+                          <span>11:22</span>
+                          <div className="flex gap-0.5 items-end h-1">
+                            <div className="w-[0.5px] h-[0.5px] bg-white/60" />
+                            <div className="w-[0.5px] h-[0.8px] bg-white/60" />
+                            <div className="w-[0.5px] h-[1.2px] bg-white/60" />
+                          </div>
+                        </div>
+                        <div className="w-7 h-1.5 bg-black rounded-full border border-white/5" />
+                        <div className="flex items-center gap-1 font-mono">
+                          <span>5G</span>
+                          <span>29%</span>
                         </div>
                       </div>
-                      <div className="w-7 h-1.5 bg-black rounded-full border border-white/5" />
-                      <div className="flex items-center gap-1 font-mono">
-                        <span>5G</span>
-                        <span>29%</span>
-                      </div>
-                    </div>
+                    )
                   ) : (
                     <div className="flex items-center gap-1.5 px-2.5 py-1.5" style={{ background: "rgba(0,0,0,0.5)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
                       <div className="w-1.5 h-1.5 rounded-full bg-red-400/70" />
@@ -587,9 +633,9 @@ function HomePreviewCard({
                       </div>
                     </div>
                   )}
-                  <div style={{ aspectRatio: proj.isMobile ? "9/16" : "16/9", position: "relative", overflow: "hidden" }}>
+                  <div style={{ aspectRatio: proj.isMobile ? (proj.isPoster ? "2/3" : "9/16") : "16/9", position: "relative", overflow: "hidden" }}>
                     <HomeProjScreen projIdx={projIdx} slotIdx={si} />
-                    {proj.isMobile && (
+                    {proj.isMobile && !proj.isPoster && (
                       <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-white/30 rounded-full pointer-events-none" />
                     )}
                   </div>
@@ -671,11 +717,31 @@ function HomeProjDetail({ proj, idx }: { proj: typeof PROJECTS[0]; idx: number }
       {/* Action buttons */}
       <div className="flex flex-wrap gap-2.5">
         {proj.liveUrl && (
-          <a href={proj.liveUrl} target={proj.isMobile ? undefined : "_blank"} rel="noreferrer" download={proj.isMobile ? "pocketmind.apk" : undefined}
+          <a
+            href={proj.liveUrl}
+            target="_blank"
+            rel="noreferrer"
+            download={proj.liveUrl.includes("play.google.com") ? undefined : (proj.isMobile ? "pocketmind.apk" : undefined)}
             className="flex items-center gap-1.5 px-5 py-2.5 font-mono text-[9px] font-black uppercase text-white hover:opacity-90 transition-opacity"
             style={{ backgroundColor: g.accent }}>
-            {proj.isMobile ? <Download size={11}/> : <Globe size={11}/>}
-            {proj.isMobile ? "Download APK" : "Live Site"}
+            {proj.liveUrl.includes("play.google.com") ? (
+              <>
+                <svg className="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24">
+                  <path d="M3.609 1.814L13.793 12 3.61 22.186a1.956 1.956 0 0 1-.223-.976V2.79c0-.36.08-.7.222-.976zm11.242 11.244l2.585-2.585-11.83-6.75 9.245 9.335zm0 1.884l-9.245 9.335 11.83-6.75-2.585-2.585zm2.868-2.868l3.187 1.818c.954.545.954 1.433 0 1.978l-3.187 1.818-2.122-2.122 2.122-2.122z"/>
+                </svg>
+                <span>Google Play</span>
+              </>
+            ) : proj.isMobile ? (
+              <>
+                <Download size={11}/>
+                <span>Download APK</span>
+              </>
+            ) : (
+              <>
+                <Globe size={11}/>
+                <span>Live Site</span>
+              </>
+            )}
           </a>
         )}
         {proj.githubUrl && (
