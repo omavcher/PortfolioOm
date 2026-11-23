@@ -6,7 +6,7 @@ const BASE = "https://omavchar.space";
 export const metadata: Metadata = {
   title: "Om Avchar — Backend Engineer & System Design Expert",
   description:
-    "Portfolio of Om Avchar — a Backend Engineer from Nagpur, India specialising in System Design, Node.js, Redis, Kafka, AI Pipelines, and scalable microservices. Built HeartEcho (550K+ users). Open to internships & collaborations.",
+    "Portfolio of Om Avchar — a Backend Engineer from Nagpur, India specialising in System Design, Node.js, Redis, Kafka, AI Pipelines, and scalable microservices. Built HeartEcho (9,000+ users). Open to internships & collaborations.",
   keywords: [
     "Om Avchar portfolio",
     "Om Avchar",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Om Avchar — Backend Engineer & System Design Expert",
     description:
-      "Backend engineering portfolio — System Design, Node.js, Redis, Kafka, AI Pipelines. Built HeartEcho (550K+ users). Based in Nagpur, India.",
+      "Backend engineering portfolio — System Design, Node.js, Redis, Kafka, AI Pipelines. Built HeartEcho (9,000+ users). Based in Nagpur, India.",
     url: BASE,
     type: "website",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Om Avchar Portfolio" }],
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Om Avchar — Backend Engineer & System Design Expert",
-    description: "Backend engineering portfolio — Node.js, Redis, Kafka, AI. Built HeartEcho (550K users). Nagpur, India.",
+    description: "Backend engineering portfolio — Node.js, Redis, Kafka, AI. Built HeartEcho (9,000+ users). Nagpur, India.",
     images: ["/og-image.png"],
   },
 };

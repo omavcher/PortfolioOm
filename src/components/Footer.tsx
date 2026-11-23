@@ -108,7 +108,7 @@ export default function Footer() {
         {/* ── Stats bar ── */}
         <div className="mt-10 sm:mt-12 py-6 border-y border-slate-800 grid grid-cols-3 gap-4 text-center">
           {[
-            { val: "550K+", label: "Users Served" },
+            { val: "9,000+", label: "Users Served" },
             { val: "3,769+", label: "GitHub Commits" },
             { val: "5+", label: "Hackathon Wins" },
           ].map((s) => (

@@ -6,7 +6,7 @@ const BASE = "https://omavchar.space";
 export const metadata: Metadata = {
   title: "Projects | Om Avchar — Scaled Systems & AI Apps",
   description:
-    "Explore the systems built by Om Avchar: TryOff (AI Outfit, Hair & Beard Try-On mobile app live on Google Play), PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
+    "Explore the systems built by Om Avchar: TryOff (AI Outfit, Hair & Beard Try-On mobile app live on Google Play), PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 9,000+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
   keywords: [
     "Om Avchar projects",
     "TryOff AI",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Projects | Om Avchar — Scaled Systems & AI Apps",
     description:
-      "Explore the systems built by Om Avchar: TryOff (AI Outfit & Style Studio on Play Store), PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
+      "Explore the systems built by Om Avchar: TryOff (AI Outfit & Style Studio on Play Store), PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 9,000+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
     url: `${BASE}/projects`,
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Projects by Om Avchar" }],
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Projects | Om Avchar — Scaled Systems & AI Apps",
     description:
-      "Explore the systems built by Om Avchar: TryOff (AI Outfit & Style Studio on Play Store), PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 550k+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
+      "Explore the systems built by Om Avchar: TryOff (AI Outfit & Style Studio on Play Store), PocketMind (Offline-First Personal AI on-device mobile app), HeartEcho (AI Companion Platform scaled to 9,000+ users), PaperXify (YouTube note generator), and Autonomous Social Content Engine.",
     images: ["/og-image.png"],
   },
 };
@@ -70,7 +70,7 @@ export default function ProjectsPage() {
         "@type": "SoftwareApplication",
         "position": 3,
         "name": "HeartEcho",
-        "description": "AI companion platform scaled to 550k+ users with custom priority queues, Redis caching, and real-time WebSockets.",
+        "description": "AI companion platform scaled to 9,000+ users with custom priority queues, Redis caching, and real-time WebSockets.",
         "applicationCategory": "MultimediaApplication",
         "operatingSystem": "All",
       },

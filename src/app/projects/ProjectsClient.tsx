@@ -83,15 +83,15 @@ const PROJECTS = [
   {
     num: "03", category: "AI Platform", date: "2024 – 2026",
     title: "HeartEcho", subtitle: "AI Companion Platform",
-    tagline: "An AI companion platform that scaled to 550,000+ active users",
+    tagline: "An AI companion platform that scaled to 9,000+ registered users",
     desc: "I built the entire backend from scratch — a custom Priority Queue for AI scheduling, Redis Emotional Cache with sub-12ms retrieval, and Nginx load balancing with sticky sessions across 4 Node.js clusters.",
     features: [
       { label: "Custom Priority Queue", detail: "Per-user AI scheduling with fairness guarantees and backpressure control" },
       { label: "Redis Emotional Cache", detail: "Hash-indexed context retrieval in <12ms, TTL-based expiry strategy" },
       { label: "Nginx Sticky Sessions", detail: "Consistent routing across 4 Node.js instances, zero session loss" },
-      { label: "WebSocket Messaging",   detail: "Socket.io real-time, sub-100ms at 550K concurrent users" },
+      { label: "WebSocket Messaging",   detail: "Socket.io real-time chat with low latency and high concurrency" },
     ],
-    stats: [{ val: "550K+", label: "Users" }, { val: "<12ms", label: "Latency" }, { val: "4×", label: "Clusters" }],
+    stats: [{ val: "9,000+", label: "Users" }, { val: "<12ms", label: "Latency" }, { val: "4×", label: "Clusters" }],
     tags: ["Next.js", "Node.js", "OpenAI", "Redis", "Nginx", "MongoDB", "Socket.io", "AWS"],
     images: [
       { src: "/projects/heartecho-3.png", label: "caliing" },

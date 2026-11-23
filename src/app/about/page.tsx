@@ -6,7 +6,7 @@ const BASE = "https://omavchar.space";
 export const metadata: Metadata = {
   title: "About Om Avchar — Backend Engineer from Nagpur, India",
   description:
-    "Learn about Om Avchar — a Backend Engineer and System Design Expert from Nagpur, India. Built HeartEcho (550K+ users), ranked AIR 11 at NIT Rourkela, ET-AI Hackathon semi-finalist. Expert in Node.js, Redis, Kafka, and AI.",
+    "Learn about Om Avchar — a Backend Engineer and System Design Expert from Nagpur, India. Built HeartEcho (9,000+ users), ranked AIR 11 at NIT Rourkela, ET-AI Hackathon semi-finalist. Expert in Node.js, Redis, Kafka, and AI.",
   keywords: [
     "Om Avchar biography",
     "Om Avchar about",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About Om Avchar — Backend Engineer from Nagpur, India",
     description:
-      "Om Avchar — Backend Engineer, System Designer, AI builder. Built HeartEcho (550K+ users). AIR 11 NIT Rourkela. Based in Nagpur, India.",
+      "Om Avchar — Backend Engineer, System Designer, AI builder. Built HeartEcho (9,000+ users). AIR 11 NIT Rourkela. Based in Nagpur, India.",
     url: `${BASE}/about`,
     type: "profile",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Om Avchar — About" }],
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "About Om Avchar — Backend Engineer from Nagpur",
-    description: "Backend Engineer, System Designer, AI builder. HeartEcho (550K+ users). AIR 11 NIT Rourkela.",
+    description: "Backend Engineer, System Designer, AI builder. HeartEcho (9,000+ users). AIR 11 NIT Rourkela.",
     images: ["/og-image.png"],
   },
 };

@@ -109,7 +109,7 @@ export default function NotFound() {
 
       {/* Background Sub-text */}
       <p className="fixed bottom-6 font-mono text-[8px] uppercase opacity-20 tracking-[0.8em] pointer-events-none text-center w-full">
-        SYSTEM_DIAGNOSTICS: 550K_USERS_REACHED // PAGE_NOT_FOUND
+        SYSTEM_DIAGNOSTICS: 9000_USERS_SERVED // PAGE_NOT_FOUND
       </p>
     </div>
   );

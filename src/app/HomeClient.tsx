@@ -60,13 +60,13 @@ const PROJECTS = [
     id: "heartecho",
     title: "HeartEcho",
     subtitle: "AI Companion Platform",
-    desc: "Scaled to 550,000+ users. Custom Priority Queue, Emotional Cache (sub-12ms), Nginx load balancing with sticky sessions.",
+    desc: "Scaled to 9,000+ users. Custom Priority Queue, Emotional Cache (sub-12ms), Nginx load balancing with sticky sessions.",
     tags: ["Next.js", "Node.js", "OpenAI", "Redis", "Nginx", "MongoDB"],
     logo: "https://www.heartecho.in/heartechor.png",
     liveUrl: "https://www.heartecho.in",
     githubUrl: "https://github.com/omavcher/heartecho",
     caseStudy: null,
-    stat: { label: "Users Served", value: "550K+" },
+    stat: { label: "Users Served", value: "9,000+" },
     accent: "bg-pink-50 border-pink-200",
     accentColor: "text-pink-600",
     isMobile: false,
@@ -1083,7 +1083,7 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
               {/* Stats row — each stat pops in */}
               <motion.div variants={staggerFast} className="flex flex-wrap gap-5 sm:gap-8 font-mono border-t-2 border-dashed border-slate-200 pt-6">
                 {[
-                  { label: "Users Served", val: "550K+", color: "text-red-600" },
+                  { label: "Users Served", val: "9,000+", color: "text-red-600" },
                   { 
                     label: "LeetCode Solved", 
                     val: leetcodeData?.matchedUser?.submitStatsGlobal?.acSubmissionNum?.find((x: any) => x.difficulty === "All")?.count?.toString() || "140", 
@@ -1193,7 +1193,7 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
                 I&apos;m a <span className="bg-emerald-100 border border-emerald-300 px-1.5 font-bold text-slate-900">Backend-heavy Full-Stack Engineer</span> and Computer Science student at GWCET, Nagpur — obsessed with building systems that <span className="bg-blue-100 border border-blue-300 px-1.5 font-bold text-slate-900">massive scale</span>.
               </p>
               <p>
-                I specialize in <strong>distributed system design</strong>, high-concurrency Node.js architectures, AI pipeline engineering, and database optimization. My flagship project HeartEcho scaled from zero to <strong>550,000+ users</strong> using a custom Priority Queue + Redis Emotional Cache system I designed from scratch.
+                I specialize in <strong>distributed system design</strong>, high-concurrency Node.js architectures, AI pipeline engineering, and database optimization. My flagship project HeartEcho scaled from zero to <strong>9,000+ users</strong> using a custom Priority Queue + Redis Emotional Cache system I designed from scratch.
               </p>
               <p className="font-mono text-xs text-slate-500 border-l-4 border-black pl-4 leading-loose">
                 &gt; Core Stack: Node.js · Redis · MongoDB · PostgreSQL · AWS · Nginx · OpenAI
@@ -1217,7 +1217,7 @@ export default function HomeClient({ initialLeetcodeData }: HomeClientProps) {
               viewport={VIEWPORT_ONCE}
             >
               {[
-                { icon: <Users size={18} className="text-red-500" />, val: "550,000+", label: "Users Served", bg: "bg-red-50" },
+                { icon: <Users size={18} className="text-red-500" />, val: "9,000+", label: "Users Served", bg: "bg-red-50" },
                 { icon: <Trophy size={18} className="text-yellow-500" />, val: "5+", label: "Hackathon Placements", bg: "bg-yellow-50" },
                 { icon: <Code size={18} className="text-orange-500" />, val: "1,396", label: "LeetCode Rating", bg: "bg-orange-50" },
                 { icon: <Sparkles size={18} className="text-blue-500" />, val: "3+", label: "Internships", bg: "bg-blue-50" },

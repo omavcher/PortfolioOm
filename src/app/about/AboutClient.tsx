@@ -14,7 +14,7 @@ import {
 // ── Data ─────────────────────────────────────────────────────────────────────
 
 const STATS = [
-  { val: "550K+", label: "Users on HeartEcho", icon: <Users size={14} className="text-blue-600" />, accent: "#2563eb" },
+  { val: "9,000+", label: "Users on HeartEcho", icon: <Users size={14} className="text-blue-600" />, accent: "#2563eb" },
   { val: "1,396", label: "LeetCode Rating",    icon: <Flame size={14} className="text-red-600" />, accent: "#dc2626" },
   { val: "~28%",  label: "Page Load Cut",       icon: <BarChart3 size={14} className="text-emerald-600" />, accent: "#059669" },
   { val: "AIR 11",label: "National AI Rank",    icon: <Trophy size={14} className="text-amber-600" />, accent: "#d97706" },
@@ -96,9 +96,9 @@ const PROJECTS = [
     href: "https://heartecho.in",
     accent: "#2563eb",
     stack: ["Next.js", "Node.js", "OpenAI API", "MongoDB", "Redis", "TypeScript"],
-    metric: { val: "550K+", label: "Registered users" },
+    metric: { val: "9,000+", label: "Registered users" },
     bullets: [
-      "Designed a two-tier traffic routing system using Priority Queues and a custom Load Balancer to separate free-tier and premium API calls — required by the constraint of a single shared OpenAI rate limit across 550,000+ users.",
+      "Designed a two-tier traffic routing system using Priority Queues and a custom Load Balancer to separate free-tier and premium API calls — required by the constraint of a single shared OpenAI rate limit across 9,000+ users.",
       "Implemented a Redis-backed caching layer ('Emotional Cache') that stores per-user conversation context as structured embeddings, reducing redundant LLM inference calls and cutting average response latency by ~40% under peak load (1,000–3,000 DAU).",
       "Architected the message queue to decouple real-time chat from background memory writes, enabling the system to sustain throughput without blocking on database I/O.",
     ],
@@ -154,7 +154,7 @@ const SKILLS = [
 const VALUES = [
   { icon: <Cpu size={18} className="text-blue-600" />, title: "Systems Thinker", desc: "I think in distributed systems — queues, caches, consistency. Every feature decision flows from architecture.", accent: "#2563eb" },
   { icon: <Zap size={18} className="text-orange-600" />, title: "Performance Obsessed", desc: "Sub-second response times aren't a luxury. From database indexing to CDN strategy, I optimize everything.", accent: "#d97706" },
-  { icon: <Heart size={18} className="text-red-500" />, title: "Builder at Heart", desc: "I build real products used by real people. HeartEcho reaching 550K users validated that obsession.", accent: "#dc2626" },
+  { icon: <Heart size={18} className="text-red-500" />, title: "Builder at Heart", desc: "I build real products used by real people. HeartEcho reaching 9,000+ users validated that obsession.", accent: "#dc2626" },
   { icon: <Globe size={18} className="text-emerald-600" />, title: "Open to Learn", desc: "Actively reading distributed systems papers, whitepapers from Google & Meta, and studying production postmortems.", accent: "#059669" },
 ];
 
@@ -165,7 +165,7 @@ const STICKERS = [
     description: "SOLVING PROBLEMS 50+ DAYS IN 2026",
     image: "/badges/leetcode_2026_50days_badge.png",
     initialRotation: -3,
-    left: "10%",
+    left: "5%",
     top: "15%",
     sizeClass: "w-[90px] sm:w-[115px] md:w-[130px]",
   },
@@ -175,7 +175,17 @@ const STICKERS = [
     description: "SOLVING PROBLEMS 100+ DAYS IN 2026",
     image: "/badges/leetcode_2026_100days_badge.png",
     initialRotation: 2,
-    left: "32%",
+    left: "24%",
+    top: "15%",
+    sizeClass: "w-[90px] sm:w-[115px] md:w-[130px]",
+  },
+  {
+    id: "leetcode-200-2026",
+    name: "LeetCode 200 Days Badge 2026!",
+    description: "SOLVING PROBLEMS 200+ DAYS IN 2026",
+    image: "/badges/leetcode_2026_200days_badge.png",
+    initialRotation: -4,
+    left: "43%",
     top: "15%",
     sizeClass: "w-[90px] sm:w-[115px] md:w-[130px]",
   },
@@ -184,8 +194,8 @@ const STICKERS = [
     name: "LeetCode June Challenge 2026!",
     description: "LEETCODE JUNE CHALLENGE 2026",
     image: "/badges/leetcode_june_2026.png",
-    initialRotation: -2,
-    left: "54%",
+    initialRotation: 3,
+    left: "62%",
     top: "15%",
     sizeClass: "w-[90px] sm:w-[115px] md:w-[130px]",
   },
@@ -194,8 +204,8 @@ const STICKERS = [
     name: "LeetCode July Challenge 2026!",
     description: "LEETCODE JULY CHALLENGE 2026",
     image: "/badges/leetcode_july_2026.png",
-    initialRotation: 4,
-    left: "76%",
+    initialRotation: -2,
+    left: "81%",
     top: "15%",
     sizeClass: "w-[90px] sm:w-[115px] md:w-[130px]",
   }
